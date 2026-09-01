@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Sora:wght@400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-emerald: #0c5a43;
+  --color-emerald-bright: #12936c;
+  --color-emerald-deep: #08402f;
+  --color-gold: #c8a04e;
+  --color-gold-soft: #e0c282;
+  --color-ivory: #f6f3ec;
+  --color-charcoal: #15241d;
+  --color-soft-text: #5d6b62;
+
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Sora", ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-ivory);
+    color: var(--color-charcoal);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  .tech-cursor, .tech-cursor a, .tech-cursor button, .tech-cursor input, .tech-cursor textarea, .tech-cursor select {
+    cursor: none !important;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+  }
+}
