@@ -13,6 +13,10 @@ import TechnologySolutions from "./pages/TechnologySolutions";
 import Advisory from "./pages/Advisory";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
+import Blog from "./pages/Blog";
+import News from "./pages/News";
+import BlogPage from "./pages/BlogPage";
+import NewsPage from "./pages/NewsPage";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -38,6 +42,10 @@ export default function App() {
             <Route path="/advisory" element={<Advisory />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:blogId" element={<BlogPage />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/news/:newsId" element={<NewsPage />} />
           </Routes>
         </main>
         <Footer />

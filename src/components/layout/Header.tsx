@@ -23,10 +23,12 @@ export function Header() {
   }, [location.pathname]);
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Technology', path: '/technology' },
-    { name: 'Advisory', path: '/advisory' },
-    { name: 'About', path: '/about' },
+    { name: "Home", path: "/" },
+    { name: "Technology", path: "/technology" },
+    { name: "Advisory", path: "/advisory" },
+    { name: "About", path: "/about" },
+    { name: "Blog", path: "/blog" },
+    { name: "News", path: "/news" },
   ];
 
   const darkNavRoutes = ['/', '/advisory', '/technology'];
