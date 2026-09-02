@@ -1,21 +1,28 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { motion, AnimatePresence } from 'motion/react';
-import { Menu, X } from 'lucide-react';
-import { Logo } from '../ui/Logo';
-import { cn } from '../../lib/utils';
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { motion, AnimatePresence } from "motion/react";
+import { Menu, X } from "lucide-react";
+import { Logo } from "../ui/Logo";
+import { cn } from "../../lib/utils";
+import { useAuth } from "@clerk/react";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { isLoaded, isSignedIn, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut({ redirectUrl: "/" });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
@@ -31,16 +38,16 @@ export function Header() {
     { name: "News", path: "/news" },
   ];
 
-  const darkNavRoutes = ['/', '/advisory', '/technology'];
+  const darkNavRoutes = ["/", "/advisory", "/technology"];
   const isDarkTop = darkNavRoutes.includes(location.pathname);
 
   return (
     <header
       className={cn(
-        'fixed top-0 inset-x-0 z-50 transition-all duration-300',
+        "fixed top-0 inset-x-0 z-50 transition-all duration-300",
         isScrolled
-          ? 'bg-white/80 backdrop-blur-md shadow-sm py-4'
-          : 'bg-transparent py-6'
+          ? "bg-white/80 backdrop-blur-md shadow-sm py-4"
+          : "bg-transparent py-6",
       )}
     >
       <div className="container mx-auto px-6 md:px-12 flex items-center justify-between relative">
@@ -53,15 +60,47 @@ export function Header() {
               key={link.name}
               to={link.path}
               className={cn(
-                'font-sans font-medium text-sm transition-colors',
+                "font-sans font-medium text-sm transition-colors",
                 !isScrolled && isDarkTop
-                  ? 'text-white/90 hover:text-white' 
-                  : 'text-charcoal hover:text-emerald'
+                  ? "text-white/90 hover:text-white"
+                  : "text-charcoal hover:text-emerald",
               )}
             >
               {link.name}
             </Link>
           ))}
+          {/* Authentication */}{" "}
+          {isLoaded && (
+            <>
+              {isSignedIn && (
+                <>
+                  <Link
+                    to="/admin"
+                    className={cn(
+                      "font-sans font-medium text-sm transition-colors",
+                      !isScrolled && isDarkTop
+                        ? "text-white/90 hover:text-white"
+                        : "text-charcoal hover:text-emerald",
+                    )}
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    className={cn(
+                      "font-sans font-medium text-sm transition-colors",
+                      !isScrolled && isDarkTop
+                        ? "text-white/90 hover:text-white"
+                        : "text-charcoal hover:text-emerald",
+                    )}
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
+            </>
+          )}
         </nav>
 
         {/* Mobile Toggle */}
@@ -71,9 +110,19 @@ export function Header() {
           aria-label="Toggle menu"
         >
           {mobileMenuOpen ? (
-            <X className={cn("w-6 h-6", !isScrolled && isDarkTop ? "text-white" : "")} />
+            <X
+              className={cn(
+                "w-6 h-6",
+                !isScrolled && isDarkTop ? "text-white" : "",
+              )}
+            />
           ) : (
-            <Menu className={cn("w-6 h-6", !isScrolled && isDarkTop ? "text-white" : "")} />
+            <Menu
+              className={cn(
+                "w-6 h-6",
+                !isScrolled && isDarkTop ? "text-white" : "",
+              )}
+            />
           )}
         </button>
       </div>

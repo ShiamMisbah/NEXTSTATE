@@ -203,7 +203,7 @@ const Blog = (props: Props) => {
                     <FeaturedBlogCard featuredPost={featuredPost} />
                   )}
 
-                  {regularBlogs.length > 0 && activeCategory !== "All" && (
+                  {regularBlogs.length > 0 && (activeCategory !== "All" || search )  && (
                     <BlogCard blog={regularBlogs[0]} index={0} />
                   )}
 
