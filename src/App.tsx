@@ -68,7 +68,7 @@ export default function App() {
 
               <Route path="/admin/blog" element={<AdminBlogs />} />
               <Route path="/admin/blog/create" element={<CreateBlog />} />
-              <Route path="/admin/blog/:blogId/edit" element={<EditBlog />} />
+              <Route path="/admin/blog/:blogId/edit" element={<CreateBlog />} />
 
               <Route path="/admin/news" element={<AdminNews />} />
               <Route path="/admin/news/create" element={<CreateNews />} />

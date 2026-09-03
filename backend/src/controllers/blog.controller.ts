@@ -96,11 +96,7 @@ export const createBlog = async (req: Request, res: Response) => {
 
     // Clerk authenticated user
     const { userId } = getAuth(req)
-    console.log("userId", userId);
 
-    
-    
- 
     if (!userId) {
       return res.status(401).json({
         success: false,
@@ -109,7 +105,6 @@ export const createBlog = async (req: Request, res: Response) => {
     }
 
     const user = await clerkClient.users.getUser(userId);
-    console.log(user.username);
 
     if (!title || !excerpt || !content || !category) {
       return res.status(400).json({
@@ -121,7 +116,7 @@ export const createBlog = async (req: Request, res: Response) => {
     
     
     // You can replace this with Clerk user information
-    const author = req.body.author;
+    const author = user.username;
 
     if (!author) {
       return res.status(400).json({
@@ -179,11 +174,39 @@ export const updateBlog = async (req: Request, res: Response) => {
       content,
       category,
       image,
-      author,
       readTime,
       featured,
       published,
     } = req.body;
+
+    // Clerk authenticated user
+    const { userId } = getAuth(req);
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const user = await clerkClient.users.getUser(userId);
+
+    if (!title || !excerpt || !content || !category) {
+      return res.status(400).json({
+        success: false,
+        message: "Title, excerpt, content and category are required",
+      });
+    }
+
+    // You can replace this with Clerk user information
+    const author = user.username;
+
+    if (!author) {
+      return res.status(400).json({
+        success: false,
+        message: "Author is required",
+      });
+    }
 
     const blog = await Blog.findById(id);
 
@@ -194,13 +217,14 @@ export const updateBlog = async (req: Request, res: Response) => {
       });
     }
 
+    blog.author = author;
+    blog.authorId = userId;
     blog.title = title;
     blog.slug = slug;
     blog.excerpt = excerpt;
     blog.content = content;
     blog.category = category;
     blog.image = image;
-    blog.author = author;
     blog.readTime = readTime || "5 min read";
     blog.featured = Boolean(featured);
     blog.published = published !== false;

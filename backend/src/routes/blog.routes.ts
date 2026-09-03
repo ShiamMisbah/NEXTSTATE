@@ -21,7 +21,7 @@ router.get("/:id", getBlogById);
 
 // Protected
 router.post("/", requireAuth(), createBlog);
-router.put("/:id", authMiddleware, updateBlog);
-router.delete("/:id", authMiddleware, deleteBlog);
+router.put("/:id", requireAuth(), updateBlog);
+router.delete("/:id", requireAuth(), deleteBlog);
 
 export default router;
