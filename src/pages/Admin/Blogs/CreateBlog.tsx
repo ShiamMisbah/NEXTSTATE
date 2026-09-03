@@ -9,20 +9,9 @@ import {
 } from "lucide-react";
 import { useUser } from "@clerk/react";
 import BlogHeader from "./BlogForm/BlogHeader";
-import BlogSidebar, { BlogCategory } from "./BlogForm/BlogSidebar";
+import BlogSidebar from "./BlogForm/BlogSidebar";
 import BlogMainForm from "./BlogForm/BlogMainForm";
-
-export interface BlogForm {
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  category: BlogCategory | "";
-  image: string;
-  readTime: string;
-  featured: boolean;
-  published: boolean;
-}
+import { BlogForm } from "@/src/lib/BlogTypes";
 
 const CreateBlog = () => {
   const { blogId } = useParams<{ blogId: string }>();
@@ -66,7 +55,7 @@ const CreateBlog = () => {
         setError("");
 
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/blogs/${blogId}`,
+          `${import.meta.env.VITE_API_URL}/api/blog/${blogId}`,
           {
             credentials: "include",
           },
@@ -136,8 +125,8 @@ const CreateBlog = () => {
 
       const response = await fetch(
         isEditMode
-          ? `${import.meta.env.VITE_API_URL}/api/blogs/${blogId}`
-          : `${import.meta.env.VITE_API_URL}/api/blogs`,
+          ? `${import.meta.env.VITE_API_URL}/api/blog/${blogId}`
+          : `${import.meta.env.VITE_API_URL}/api/blog`,
         {
           method: isEditMode ? "PUT" : "POST",
           headers: {

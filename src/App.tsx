@@ -23,7 +23,6 @@ import AdminRoute from "./pages/Admin/AdminRoute";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
 import AdminBlogs from "./pages/Admin/Blogs/AdminBlogs";
 import CreateBlog from "./pages/Admin/Blogs/CreateBlog";
-import EditBlog from "./pages/Admin/Blogs/EditBlog";
 import AdminNews from "./pages/Admin/News/AdminNews";
 import CreateNews from "./pages/Admin/News/CreateNews";
 import EditNews from "./pages/Admin/News/EditNews";

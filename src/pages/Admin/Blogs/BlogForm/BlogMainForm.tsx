@@ -1,6 +1,6 @@
 import React, { SetStateAction } from "react";
-import { BlogForm } from "../CreateBlog";
 import { ImageIcon } from "lucide-react";
+import { BlogForm } from "@/src/lib/BlogTypes";
 
 type Props = {
   form: BlogForm;

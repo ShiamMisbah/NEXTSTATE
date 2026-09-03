@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use(clerkMiddleware());
 
-app.use("/api/blogs", blogRoutes);
+app.use("/api/blog", blogRoutes);
 app.use("/api/news", newsRoutes);
 
 export default app;

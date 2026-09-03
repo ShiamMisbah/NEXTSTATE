@@ -58,7 +58,6 @@ const AdminDashboard = () => {
   return (
     <div className="bg-ivory text-charcoal min-h-screen pt-32 pb-24 overflow-hidden selection:bg-emerald/10 selection:text-emerald relative">
       {/* <CustomCursor theme="light" /> */}
-      <GetToken />
 
       <div className="container px-6 md:px-12 mx-auto max-w-6xl space-y-8 relative z-10">
         {/* Decorative Grid Accents */}

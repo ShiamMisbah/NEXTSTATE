@@ -164,6 +164,7 @@ export const createBlog = async (req: Request, res: Response) => {
 
 // PUT /api/blogs/:id
 export const updateBlog = async (req: Request, res: Response) => {
+  
   try {
     const { id } = req.params;
 
@@ -189,25 +190,6 @@ export const updateBlog = async (req: Request, res: Response) => {
       });
     }
 
-    const user = await clerkClient.users.getUser(userId);
-
-    if (!title || !excerpt || !content || !category) {
-      return res.status(400).json({
-        success: false,
-        message: "Title, excerpt, content and category are required",
-      });
-    }
-
-    // You can replace this with Clerk user information
-    const author = user.username;
-
-    if (!author) {
-      return res.status(400).json({
-        success: false,
-        message: "Author is required",
-      });
-    }
-
     const blog = await Blog.findById(id);
 
     if (!blog) {
@@ -217,17 +199,34 @@ export const updateBlog = async (req: Request, res: Response) => {
       });
     }
 
-    blog.author = author;
-    blog.authorId = userId;
-    blog.title = title;
-    blog.slug = slug;
-    blog.excerpt = excerpt;
-    blog.content = content;
-    blog.category = category;
-    blog.image = image;
-    blog.readTime = readTime || "5 min read";
-    blog.featured = Boolean(featured);
-    blog.published = published !== false;
+    // Update only fields that were actually provided
+    if (title !== undefined) blog.title = title;
+    if (slug !== undefined) blog.slug = slug;
+    if (excerpt !== undefined) blog.excerpt = excerpt;
+    if (content !== undefined) blog.content = content;
+    if (category !== undefined) blog.category = category;
+    if (image !== undefined) blog.image = image;
+    if (readTime !== undefined) blog.readTime = readTime;
+
+    if (featured !== undefined) {
+      blog.featured = Boolean(featured);
+    }
+
+    if (published !== undefined) {
+      blog.published = Boolean(published);
+    }
+
+    // Only change author when you are intentionally attributing
+    // the update to the current Clerk user.
+    const user = await clerkClient.users.getUser(userId);
+
+    const author =
+      user.username || user.firstName || user.emailAddresses?.[0]?.emailAddress;
+
+    if (author) {
+      blog.author = author;
+      blog.authorId = userId;
+    }
 
     const updatedBlog = await blog.save();
 

@@ -1,18 +1,7 @@
 import React from 'react'
-import { BlogForm } from '../CreateBlog';
 import { useUser } from '@clerk/react';
 import { Loader2, Save, Send } from 'lucide-react';
-
-const BLOG_CATEGORIES = [
-  "Technology",
-  "AI",
-  "Business",
-  "Design",
-  "Development",
-  "Future",
-] as const;
-
-export type BlogCategory = (typeof BLOG_CATEGORIES)[number];
+import { BLOG_CATEGORIES, BlogCategory, BlogForm } from '@/src/lib/BlogTypes';
 
 type Props = {
   form: BlogForm;
