@@ -1,14 +1,16 @@
-import React from 'react'
-import { useParams } from 'react-router-dom'
+import React from "react";
+import { useParams } from "react-router-dom";
 
-type Props = {}
+type Props = {};
 
 const NewsPage = (props: Props) => {
-  const {newsId} = useParams()
+  const { slug } = useParams();
 
   return (
-    <div className="bg-ivory text-charcoal min-h-screen pt-32 pb-24 overflow-hidden selection:bg-emerald/10 selection:text-emerald relative">NewsPage {newsId}</div>
-  )
-}
+    <div className="bg-ivory text-charcoal min-h-screen pt-32 pb-24 overflow-hidden selection:bg-emerald/10 selection:text-emerald relative">
+      NewsPage {slug}
+    </div>
+  );
+};
 
-export default NewsPage
+export default NewsPage;

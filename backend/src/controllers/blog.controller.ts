@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Blog from "../models/Blog";
+import { clerkClient, getAuth } from "@clerk/express";
 
 // GET /api/blogs
 export const getBlogs = async (req: Request, res: Response) => {
@@ -78,6 +79,8 @@ export const getBlogBySlug = async (req: Request, res: Response) => {
 
 // POST /api/blogs
 export const createBlog = async (req: Request, res: Response) => {
+  console.log("ashche");
+  
   try {
     const {
       title,
@@ -86,14 +89,46 @@ export const createBlog = async (req: Request, res: Response) => {
       content,
       category,
       image,
-      author,
       readTime,
       featured,
       published,
     } = req.body;
 
     // Clerk authenticated user
-    const authorId = req.auth.userId;
+    const { userId } = getAuth(req)
+    console.log("userId", userId);
+
+    
+    
+ 
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const user = await clerkClient.users.getUser(userId);
+    console.log(user.username);
+
+    if (!title || !excerpt || !content || !category) {
+      return res.status(400).json({
+        success: false,
+        message: "Title, excerpt, content and category are required",
+      });
+    }
+
+    
+    
+    // You can replace this with Clerk user information
+    const author = req.body.author;
+
+    if (!author) {
+      return res.status(400).json({
+        success: false,
+        message: "Author is required",
+      });
+    }
 
     const blog = await Blog.create({
       title,
@@ -101,12 +136,12 @@ export const createBlog = async (req: Request, res: Response) => {
       excerpt,
       content,
       category,
-      image,
+      image: image || "",
       author,
-      authorId,
-      readTime,
-      featured,
-      published,
+      authorId: userId,
+      readTime: readTime || "5 min read",
+      featured: Boolean(featured),
+      published: published !== false,
     });
 
     return res.status(201).json({
@@ -166,9 +201,9 @@ export const updateBlog = async (req: Request, res: Response) => {
     blog.category = category;
     blog.image = image;
     blog.author = author;
-    blog.readTime = readTime;
-    blog.featured = featured;
-    blog.published = published;
+    blog.readTime = readTime || "5 min read";
+    blog.featured = Boolean(featured);
+    blog.published = published !== false;
 
     const updatedBlog = await blog.save();
 

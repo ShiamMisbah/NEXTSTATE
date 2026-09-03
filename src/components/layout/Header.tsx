@@ -69,36 +69,33 @@ export function Header() {
               {link.name}
             </Link>
           ))}
-          {/* Authentication */}{" "}
-          {isLoaded && (
+          {/* Authentication */}
+          {isLoaded && isSignedIn && (
             <>
-              {isSignedIn && (
-                <>
-                  <Link
-                    to="/admin"
-                    className={cn(
-                      "font-sans font-medium text-sm transition-colors",
-                      !isScrolled && isDarkTop
-                        ? "text-white/90 hover:text-white"
-                        : "text-charcoal hover:text-emerald",
-                    )}
-                  >
-                    Dashboard
-                  </Link>
-                  <button
-                    type="button"
-                    onClick={handleLogout}
-                    className={cn(
-                      "font-sans font-medium text-sm transition-colors",
-                      !isScrolled && isDarkTop
-                        ? "text-white/90 hover:text-white"
-                        : "text-charcoal hover:text-emerald",
-                    )}
-                  >
-                    Logout
-                  </button>
-                </>
-              )}
+              <Link
+                to="/admin"
+                className={cn(
+                  "font-sans font-medium text-sm transition-colors",
+                  !isScrolled && isDarkTop
+                    ? "text-white/90 hover:text-white"
+                    : "text-charcoal hover:text-emerald",
+                )}
+              >
+                Dashboard
+              </Link>
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className={cn(
+                  "font-sans font-medium text-sm transition-colors",
+                  !isScrolled && isDarkTop
+                    ? "text-white/90 hover:text-white"
+                    : "text-charcoal hover:text-emerald",
+                )}
+              >
+                Logout
+              </button>
             </>
           )}
         </nav>
@@ -145,6 +142,30 @@ export function Header() {
                 {link.name}
               </Link>
             ))}
+
+            {/* Authentication */}
+            {isLoaded && isSignedIn && (
+              <>
+                <Link
+                  to="/admin"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="font-sans font-medium text-lg text-charcoal pb-4 border-b border-gray-100"
+                >
+                  Dashboard
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    handleLogout();
+                  }}
+                  className="font-sans font-medium text-lg text-left text-charcoal"
+                >
+                  Logout
+                </button>
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

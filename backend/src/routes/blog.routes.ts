@@ -10,6 +10,7 @@ import {
 } from "../controllers/blog.controller";
 
 import { authMiddleware } from "../middleware/auth.middleware";
+import { requireAuth } from "@clerk/express";
 
 const router = Router();
 
@@ -19,7 +20,7 @@ router.get("/slug/:slug", getBlogBySlug);
 router.get("/:id", getBlogById);
 
 // Protected
-router.post("/", authMiddleware, createBlog);
+router.post("/", requireAuth(), createBlog);
 router.put("/:id", authMiddleware, updateBlog);
 router.delete("/:id", authMiddleware, deleteBlog);
 
