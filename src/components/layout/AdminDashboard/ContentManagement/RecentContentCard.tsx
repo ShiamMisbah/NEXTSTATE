@@ -1,3 +1,4 @@
+import { Blog } from '@/src/lib/BlogTypes';
 import React from 'react'
 
 

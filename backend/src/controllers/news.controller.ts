@@ -1,18 +1,34 @@
 import { Request, Response } from "express";
-import  News  from "../models/News";
+import News from "../models/News";
+import { clerkClient, getAuth } from "@clerk/express";
 
-// GET /api/news
-export const getNews = async (
-  req: Request,
-  res: Response
-) => {
+// GET /api/news?page=1&limit=10
+export const getNews = async (req: Request, res: Response) => {
   try {
-    const news = await News.find()
-      .sort({ publishedAt: -1 });
+    const page = Math.max(Number(req.query.page) || 1, 1);
+    const limit = Math.max(Number(req.query.limit) || 10, 1);
+
+    const skip = (page - 1) * limit;
+
+    const [news, totalNews] = await Promise.all([
+      News.find().sort({ createdAt: -1 }).skip(skip).limit(limit),
+
+      News.countDocuments(),
+    ]);
+
+    const totalPages = Math.ceil(totalNews / limit);
 
     return res.status(200).json({
       success: true,
       data: news,
+      pagination: {
+        currentPage: page,
+        limit,
+        totalNews,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
     });
   } catch (error) {
     console.error("Get news error:", error);
@@ -24,12 +40,8 @@ export const getNews = async (
   }
 };
 
-
 // GET /api/news/:id
-export const getNewsById = async (
-  req: Request,
-  res: Response
-) => {
+export const getNewsById = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -56,12 +68,8 @@ export const getNewsById = async (
   }
 };
 
-
 // GET /api/news/slug/:slug
-export const getNewsBySlug = async (
-  req: Request,
-  res: Response
-) => {
+export const getNewsBySlug = async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
 
@@ -88,36 +96,50 @@ export const getNewsBySlug = async (
   }
 };
 
-
 // POST /api/news
-export const createNews = async (
-  req: Request,
-  res: Response
-) => {
+export const createNews = async (req: Request, res: Response) => {
   try {
-    const {
-      title,
-      slug,
-      summary,
-      content,
-      image,
-      author,
-      published,
-      publishedAt,
-    } = req.body;
+    const { title, slug, summary, content, image, published, publishedAt } =
+      req.body;
 
-    // Always get the author ID from Clerk
-    const authorId = req.auth.userId;
+    // Clerk authenticated user
+    const { userId } = getAuth(req);
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const user = await clerkClient.users.getUser(userId);
+
+    if (!title || !summary || !content) {
+      return res.status(400).json({
+        success: false,
+        message: "Title, summary, and content are required",
+      });
+    }
+
+    // You can replace this with Clerk user information
+    const author = user.username;
+
+    if (!author) {
+      return res.status(400).json({
+        success: false,
+        message: "Author is required",
+      });
+    }
 
     const news = await News.create({
       title,
       slug,
       summary,
       content,
-      image,
+      image: image || "",
       author,
-      authorId,
-      published,
+      authorId: userId,
+      published: published !== false,
       publishedAt: publishedAt || new Date(),
     });
 
@@ -144,25 +166,23 @@ export const createNews = async (
   }
 };
 
-
 // PUT /api/news/:id
-export const updateNews = async (
-  req: Request,
-  res: Response
-) => {
+export const updateNews = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    const {
-      title,
-      slug,
-      summary,
-      content,
-      image,
-      author,
-      published,
-      publishedAt,
-    } = req.body;
+    const { title, slug, summary, content, image, published, publishedAt } =
+      req.body;
+
+    // Clerk authenticated user
+    const { userId } = getAuth(req);
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
 
     const news = await News.findById(id);
 
@@ -173,16 +193,27 @@ export const updateNews = async (
       });
     }
 
-    news.title = title;
-    news.slug = slug;
-    news.summary = summary;
-    news.content = content;
-    news.image = image;
-    news.author = author;
-    news.published = published;
+    if (title !== undefined) news.title = title;
+    if (slug !== undefined) news.slug = slug;
+    if (summary !== undefined) news.summary = summary;
+    if (content !== undefined) news.content = content;
+    if (image !== undefined) news.image = image;
+    if (published !== undefined) news.published = published;
 
     if (publishedAt) {
       news.publishedAt = publishedAt;
+    }
+
+    // Only change author when you are intentionally attributing
+    // the update to the current Clerk user.
+    const user = await clerkClient.users.getUser(userId);
+
+    const author =
+      user.username || user.firstName || user.emailAddresses?.[0]?.emailAddress;
+
+    if (author) {
+      news.author = author;
+      news.authorId = userId;
     }
 
     const updatedNews = await news.save();
@@ -210,12 +241,8 @@ export const updateNews = async (
   }
 };
 
-
 // DELETE /api/news/:id
-export const deleteNews = async (
-  req: Request,
-  res: Response
-) => {
+export const deleteNews = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 

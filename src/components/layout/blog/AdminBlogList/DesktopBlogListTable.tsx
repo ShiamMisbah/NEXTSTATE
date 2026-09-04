@@ -2,8 +2,8 @@ import { Calendar, FileText, Loader2 } from 'lucide-react';
 import React, { Dispatch, SetStateAction } from 'react'
 import ActionButtonSet from './BlogListCard/ActionButtonSet';
 import BlogThumbnail from './BlogListCard/BlogThumbnail';
-import { formatDate } from '../AdminBlogs';
 import { Blog } from '@/src/lib/BlogTypes';
+import { formatDate } from '@/src/pages/Admin/Blogs/AdminBlogs';
 
 type Props = {
     loading: boolean

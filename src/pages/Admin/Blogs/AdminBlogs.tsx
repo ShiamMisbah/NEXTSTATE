@@ -1,27 +1,17 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Search,
-  Plus,
-  Edit,
-  Trash2,
-  Star,
-  Eye,
-  EyeOff,
   Loader2,
-  MoreVertical,
   FileText,
-  Calendar,
 } from "lucide-react";
-import { Blog, BLOG_CATEGORIES } from "@/src/lib/BlogTypes";
-import BlogListHeader from "./AdminBlogList/BlogListHeader";
-import BlogListStat from "./AdminBlogList/BlogListStat";
-import BlogListFilter from "./AdminBlogList/BlogListFilter";
-import BlogThumbnail from "./AdminBlogList/BlogListCard/BlogThumbnail";
-import ActionButtonSet from "./AdminBlogList/BlogListCard/ActionButtonSet";
-import MobileBlogThumbnail from "./AdminBlogList/BlogListCard/MobileBlogThumbnail";
-import DesktopBlogListTable from "./AdminBlogList/DesktopBlogListTable";
-import MobileBlogCard from "./AdminBlogList/MobileBlogCard";
+import { Blog } from "@/src/lib/BlogTypes";
+import { useBlogs } from "@/src/hooks/useBlogs";
+import Pagination from "@/src/components/ui/Pagination";
+import BlogListHeader from "@/src/components/layout/blog/AdminBlogList/BlogListHeader";
+import BlogListStat from "@/src/components/layout/blog/AdminBlogList/BlogListStat";
+import BlogListFilter from "@/src/components/layout/blog/AdminBlogList/BlogListFilter";
+import DesktopBlogListTable from "@/src/components/layout/blog/AdminBlogList/DesktopBlogListTable";
+import MobileBlogCard from "@/src/components/layout/blog/AdminBlogList/MobileBlogCard";
 
 export const formatDate = (date: string) => {
   return new Date(date).toLocaleDateString("en-US", {
@@ -32,45 +22,24 @@ export const formatDate = (date: string) => {
 };
 
 const AdminBlogs = () => {
-  const navigate = useNavigate();
 
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { blogs, pagination, loading, error, nextPage, previousPage } =
+    useBlogs({
+      limit: 10,
+    });
+
+  const [readableBlogs, setReadableBlogs] = useState<Blog[]>([]);
 
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
   const [status, setStatus] = useState("All");
 
-  const fetchBlogs = async () => {
-    try {
-      setLoading(true);
-
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/blog`,
-        {
-          credentials: "include",
-        },
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to fetch blogs");
-      }
-
-      setBlogs(data.data || []);
-    } catch (error) {
-      console.error("Failed to fetch blogs:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
-    fetchBlogs();
-  }, []);
+    setReadableBlogs(blogs);
+  }, [blogs]);
 
-  const filteredBlogs = blogs.filter((blog) => {
+  const filteredBlogs = readableBlogs.filter((blog) => {
     const matchesSearch =
       blog.title.toLowerCase().includes(search.toLowerCase()) ||
       blog.excerpt.toLowerCase().includes(search.toLowerCase());
@@ -95,7 +64,7 @@ const AdminBlogs = () => {
         <BlogListHeader />
 
         {/* Stats */}
-        <BlogListStat blogs={blogs} />
+        <BlogListStat blogs={readableBlogs} />
 
         {/* Filters */}
         <BlogListFilter
@@ -111,7 +80,15 @@ const AdminBlogs = () => {
         <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
           {/* Desktop Table */}
           <div className="hidden overflow-x-auto md:block">
-            <DesktopBlogListTable loading={loading} filteredBlogs={filteredBlogs} setBlogs={setBlogs} />
+            <DesktopBlogListTable
+              loading={loading}
+              filteredBlogs={filteredBlogs}
+              setBlogs={setReadableBlogs}
+            />
+
+            {pagination && (
+              <Pagination nextPage={nextPage} pagination={pagination} previousPage={previousPage} />
+            )}
           </div>
 
           {/* =========================================
@@ -136,7 +113,10 @@ const AdminBlogs = () => {
                 </p>
               </div>
             ) : (
-              <MobileBlogCard filteredBlogs={filteredBlogs} setBlogs={setBlogs} />
+              <MobileBlogCard
+                filteredBlogs={filteredBlogs}
+                setBlogs={setReadableBlogs}
+              />
             )}
           </div>
         </div>
@@ -144,7 +124,7 @@ const AdminBlogs = () => {
         {/* Result count */}
         {!loading && (
           <div className="mt-4 text-sm text-slate-400">
-            Showing {filteredBlogs.length} of {blogs.length} blogs
+            Showing {filteredBlogs.length} of {readableBlogs.length} blogs
           </div>
         )}
       </div>

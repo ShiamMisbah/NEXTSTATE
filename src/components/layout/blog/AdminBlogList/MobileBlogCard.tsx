@@ -1,9 +1,9 @@
 import { SetStateAction } from 'react';
 import React, { Dispatch } from 'react'
-import { formatDate } from '../AdminBlogs';
 import { Blog } from '@/src/lib/BlogTypes';
 import MobileBlogThumbnail from './BlogListCard/MobileBlogThumbnail';
 import ActionButtonSet from './BlogListCard/ActionButtonSet';
+import { formatDate } from '@/src/pages/Admin/Blogs/AdminBlogs';
 
 type Props = {
         filteredBlogs: Blog[]

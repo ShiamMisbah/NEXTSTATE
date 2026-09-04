@@ -8,27 +8,19 @@ import {
   ChevronLeft,
   ChevronRight,
   Clock3,
+  Loader2,
   Search,
   Sparkles,
   TrendingUp,
 } from "lucide-react";
-import BlogCard from "../components/layout/blog/BlogCard";
-import FeaturedBlogCard from "../components/layout/blog/FeaturedBlogCard";
-import BlogSidebar from "../components/layout/blog/BlogSidebar";
+import BlogCard from "../components/layout/blog/GlobalBlogContent/BlogCard";
+import FeaturedBlogCard from "../components/layout/blog/GlobalBlogContent/FeaturedBlogCard";
+import BlogSidebar from "../components/layout/blog/GlobalBlogContent/BlogSidebar";
+import { useBlogs } from "../hooks/useBlogs";
+import { BLOG_CATEGORIES } from "../lib/BlogTypes";
+import Pagination from "../components/ui/Pagination";
 
 type Props = {};
-
-const categories = [
-  "All",
-  "Technology",
-  "AI",
-  "Business",
-  "Design",
-  "Development",
-  "Future",
-];
-
-
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -50,43 +42,60 @@ const fadeUp = {
   },
 };
 
-
-
 const Blog = (props: Props) => {
+  const { blogs, pagination, loading, error, nextPage, previousPage } =
+    useBlogs({
+      limit: 10,
+    });
+
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [search, setSearch] = useState<string>("");
 
-  const featuredPost = blogs.find((blog) => blog.featured);
+  const featuredPost = useMemo(() => {
+    return blogs.find((blog) => blog.featured);
+  }, [blogs]);
 
   const filteredBlogs = useMemo(() => {
+    const searchTerm = search.trim().toLowerCase();
+
     return blogs.filter((blog) => {
       const matchesCategory =
         activeCategory === "All" || blog.category === activeCategory;
 
-      const searchTerm = search.toLowerCase();
-
       const matchesSearch =
+        !searchTerm ||
         blog.title.toLowerCase().includes(searchTerm) ||
         blog.excerpt.toLowerCase().includes(searchTerm);
 
       return matchesCategory && matchesSearch;
     });
-  }, [activeCategory, search]);
+  }, [blogs, activeCategory, search]);
 
-  const regularBlogs = filteredBlogs.filter(
-    (blog) => blog.id !== featuredPost?.id,
-  );
+  const regularBlogs = useMemo(() => {
+    return filteredBlogs.filter((blog) => blog._id !== featuredPost?._id);
+  }, [filteredBlogs, featuredPost]);
 
   const categoryRef = useRef<HTMLDivElement>(null);
 
   const scrollCategories = (direction: "left" | "right") => {
     if (!categoryRef.current) return;
-    
+
     categoryRef.current.scrollBy({
       left: direction === "left" ? -250 : 250,
       behavior: "smooth",
     });
   };
+
+  if (loading) {
+    return (
+      <main className="flex min-h-[70vh] items-center justify-center">
+        <div className="flex items-center gap-3 text-gray-500">
+          <Loader2 className="h-5 w-5 animate-spin" />
+          <span>Loading blog...</span>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <div className="bg-ivory text-charcoal min-h-screen pt-32 pb-24 overflow-hidden selection:bg-emerald/10 selection:text-emerald relative">
@@ -150,7 +159,18 @@ const Blog = (props: Props) => {
                   ref={categoryRef}
                   className="flex min-w-0 gap-2 overflow-x-hidden scroll-smooth"
                 >
-                  {categories.map((category) => (
+                  <button
+                    key={"All"}
+                    onClick={() => setActiveCategory("All")}
+                    className={`shrink-0 whitespace-nowrap rounded-full px-5 py-2.5 text-sm font-semibold transition ${
+                      activeCategory === "All"
+                        ? "bg-slate-950 text-white shadow-lg"
+                        : "border border-slate-300/70 bg-white/60 text-slate-500 hover:bg-white"
+                    }`}
+                  >
+                    All
+                  </button>
+                  {BLOG_CATEGORIES.map((category) => (
                     <button
                       key={category}
                       onClick={() => setActiveCategory(category)}
@@ -203,9 +223,10 @@ const Blog = (props: Props) => {
                     <FeaturedBlogCard featuredPost={featuredPost} />
                   )}
 
-                  {regularBlogs.length > 0 && (activeCategory !== "All" || search )  && (
-                    <BlogCard blog={regularBlogs[0]} index={0} />
-                  )}
+                  {regularBlogs.length > 0 &&
+                    (activeCategory !== "All" || search) && (
+                      <BlogCard blog={regularBlogs[0]} index={0} />
+                    )}
 
                   {regularBlogs.length === 0 && (
                     <div className="rounded-[2rem] bg-white/70 py-20 text-center col-span-2">
@@ -232,6 +253,10 @@ const Blog = (props: Props) => {
               </div>
             </section>
           </motion.div>
+
+          {pagination && (
+            <Pagination nextPage={nextPage} pagination={pagination} previousPage={previousPage} />
+          )}
         </main>
       </div>
     </div>

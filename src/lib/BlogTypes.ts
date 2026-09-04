@@ -37,3 +37,18 @@ export interface Blog {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface BlogPagination {
+  currentPage: number;
+  limit: number;
+  totalBlogs: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+export interface BlogsResponse {
+  success: boolean;
+  data: Blog[];
+  pagination: BlogPagination;
+}

@@ -2,14 +2,36 @@ import { Request, Response } from "express";
 import Blog from "../models/Blog";
 import { clerkClient, getAuth } from "@clerk/express";
 
-// GET /api/blogs
+// GET /api/blogs?page=1&limit=10
 export const getBlogs = async (req: Request, res: Response) => {
   try {
-    const blogs = await Blog.find().sort({ createdAt: -1 });
+    const page = Math.max(Number(req.query.page) || 1, 1);
+    const limit = Math.max(Number(req.query.limit) || 10, 1);
+
+    const skip = (page - 1) * limit;
+
+    const [blogs, totalBlogs] = await Promise.all([
+      Blog.find()
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+
+      Blog.countDocuments(),
+    ]);
+
+    const totalPages = Math.ceil(totalBlogs / limit);
 
     return res.status(200).json({
       success: true,
       data: blogs,
+      pagination: {
+        currentPage: page,
+        limit,
+        totalBlogs,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
     });
   } catch (error) {
     console.error("Get blogs error:", error);
@@ -79,7 +101,6 @@ export const getBlogBySlug = async (req: Request, res: Response) => {
 
 // POST /api/blogs
 export const createBlog = async (req: Request, res: Response) => {
-  console.log("ashche");
   
   try {
     const {

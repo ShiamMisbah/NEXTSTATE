@@ -7,32 +7,6 @@ import GetToken from "../GetToken";
 
 const AdminDashboard = () => {
 
-  const recentBlogs: RecentContent []= [
-    {
-      title: "The Future of AI in Modern Business",
-      category: "Technology",
-      status: "Published",
-      date: "Sep 3, 2026",
-    },
-    {
-      title: "How Digital Transformation Drives Growth",
-      category: "Business",
-      status: "Published",
-      date: "Sep 1, 2026",
-    },
-    {
-      title: "Building Scalable Software Solutions",
-      category: "Technology",
-      status: "Draft",
-      date: "Aug 29, 2026",
-    },
-    {
-      title: "Why Businesses Need Better Data Strategy",
-      category: "Strategy",
-      status: "Published",
-      date: "Aug 26, 2026",
-    },
-  ];
 
   const recentNews: RecentContent[] = [
     {
@@ -58,6 +32,7 @@ const AdminDashboard = () => {
   return (
     <div className="bg-ivory text-charcoal min-h-screen pt-32 pb-24 overflow-hidden selection:bg-emerald/10 selection:text-emerald relative">
       {/* <CustomCursor theme="light" /> */}
+      <GetToken />
 
       <div className="container px-6 md:px-12 mx-auto max-w-6xl space-y-8 relative z-10">
         {/* Decorative Grid Accents */}
@@ -78,7 +53,6 @@ const AdminDashboard = () => {
             contentType="blog"
             targetLink="blog"
             key="recent-blogs"
-            recentContent={recentBlogs}
           />
 
           {/* Recent News */}
@@ -88,7 +62,7 @@ const AdminDashboard = () => {
             contentType="news"
             targetLink="news"
             key="recent-news"
-            recentContent={recentNews}
+            // recentContent={recentNews}
           />
         </div>
 

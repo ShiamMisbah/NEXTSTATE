@@ -1,22 +1,29 @@
+import { Blog } from '@/src/lib/BlogTypes';
 import { BlogPost } from '@/src/lib/DummyBlog';
+import { formatDate } from '@/src/pages/Admin/Blogs/AdminBlogs';
 import { ArrowUpRight, TrendingUp } from 'lucide-react';
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
-  featuredPost: BlogPost;
+  featuredPost: Blog;
 };
 
 const FeaturedBlogCard = ({featuredPost}: Props) => {
+  const navigate = useNavigate();
+
   return (
     <article className=" group relative mb-6 overflow-hidden rounded-4xl border border-white/80 bg-white/70 p-3 shadow-xl backdrop-blur-2xl col-span-3 lg:col-span-2">
       <div className="h-full grid overflow-hidden rounded-3xl bg-slate-950 lg:grid-cols-[1.1fr_1fr]">
         {/* Image */}
         <div className="relative min-h-80 overflow-hidden lg:min-h-[450px]">
-          <img
-            src={featuredPost.image}
-            alt={featuredPost.title}
-            className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
-          />
+          {featuredPost.image && (
+            <img
+              src={featuredPost.image}
+              alt={featuredPost.title}
+              className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+            />
+          )}
 
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
 
@@ -56,12 +63,15 @@ const FeaturedBlogCard = ({featuredPost}: Props) => {
                 <p className="text-sm font-bold">{featuredPost.author}</p>
 
                 <p className="text-xs text-slate-400">
-                  {featuredPost.date} · {featuredPost.readTime}
+                  {formatDate(featuredPost.createdAt)} · {featuredPost.readTime}
                 </p>
               </div>
             </div>
 
-            <button className="flex items-center gap-3 rounded-full bg-white px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-cyan-300">
+            <button
+              className="flex items-center gap-3 rounded-full bg-white px-5 py-3 text-sm font-bold text-slate-950 transition hover:bg-cyan-300"
+              onClick={() => navigate(`/blog/${featuredPost.slug}`)}
+            >
               Read article
               <ArrowUpRight size={17} />
             </button>
