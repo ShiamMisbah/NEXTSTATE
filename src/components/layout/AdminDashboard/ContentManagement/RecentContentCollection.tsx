@@ -8,6 +8,8 @@ import { FileText, Loader2 } from "lucide-react";
 import { useNews } from "@/src/hooks/useNews";
 import { useRecentContent } from "@/src/hooks/useRecentContent";
 import { News } from "@/src/lib/NewsTypes";
+import Loading from "@/src/components/ui/Loading";
+import Empty from "@/src/components/ui/Empty";
 
 type Props = {
   cardTitle: string;
@@ -57,17 +59,9 @@ const RecentBlogCollection = ({
   return (
     <div className="rounded-xl border border-gray-200 bg-white">
       {loading ? (
-        <div className="py-20 text-center">
-          <Loader2 size={24} className="mx-auto animate-spin text-slate-400" />
-
-          <p className="mt-3 text-sm text-slate-500">Loading blogs...</p>
-        </div>
+        <Loading />
       ) : recentContent.length === 0 ? (
-        <div className="py-20 text-center">
-          <FileText size={40} className="mx-auto text-slate-300" />
-
-          <p className="mt-3 font-medium text-slate-600">No blogs found</p>
-        </div>
+        <Empty />
       ) : (
         <div className="flex flex-col justify-between h-full">
           <div>

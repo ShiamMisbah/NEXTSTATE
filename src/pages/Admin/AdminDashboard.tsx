@@ -45,7 +45,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Quick Actions */}
-        <ADQuickActions />
+        {/* <ADQuickActions /> */}
       </div>
     </div>
   );

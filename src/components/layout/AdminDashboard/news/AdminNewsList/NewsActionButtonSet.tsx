@@ -1,5 +1,5 @@
 import { News } from "@/src/lib/NewsTypes";
-import { Edit, Eye, EyeOff, Loader2, Star, Trash2 } from "lucide-react";
+import { BookCheck, BookDashed, Edit, Eye, EyeOff, Loader2, Star, Trash2 } from "lucide-react";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -123,9 +123,9 @@ const NewsActionButtonSet = ({ news, setNews }: Props) => {
         {actionLoading === news._id ? (
           <Loader2 size={17} className="animate-spin" />
         ) : news.published ? (
-          <EyeOff size={17} />
+          <BookCheck size={17} />
         ) : (
-          <Eye size={17} />
+          <BookDashed size={17} />
         )}
       </button>
 

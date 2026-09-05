@@ -29,7 +29,7 @@ const ADQuickActions = (props: Props) => {
           <span className="text-sm font-medium">Create News</span>
         </Link>
 
-        <Link
+        {/* <Link
           to="/admin/categories"
           className="flex items-center gap-3 rounded-lg border border-gray-200 p-4 transition hover:bg-gray-50"
         >
@@ -43,7 +43,7 @@ const ADQuickActions = (props: Props) => {
         >
           <Clock className="h-5 w-5 text-gray-600" />
           <span className="text-sm font-medium">View Drafts</span>
-        </Link>
+        </Link> */}
       </div>
     </div>
   );

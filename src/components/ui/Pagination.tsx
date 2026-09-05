@@ -10,7 +10,7 @@ type Props = {
 
 const Pagination = ({pagination, previousPage, nextPage}: Props) => {
   return (
-    <div className="mt-6 rounded-xl bg-card p-4 shadow-sm">
+    <div className="mt-6 rounded-xl bg-card p-4">
       <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
         {/* Page Info */}
         <p className="text-sm text-muted-foreground">

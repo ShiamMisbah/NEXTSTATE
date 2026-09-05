@@ -2,6 +2,7 @@ import { ArrowLeft, Calendar, Clock, Loader2, Tag, User } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Blog } from "../lib/BlogTypes";
+import CustomCursor from "../components/layout/CustomCursor";
 
 type Props = {};
 
@@ -76,6 +77,7 @@ const BlogPage = (props: Props) => {
 
   return (
     <main className="bg-ivory text-charcoal min-h-screen pt-32 pb-24 overflow-hidden selection:bg-emerald/10 selection:text-emerald relative">
+      <CustomCursor theme="light" />
       <div className="container mx-auto px-6 md:px-12 max-w-7xl relative z-10">
         {/* Decorative Grid Accents */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#15241d08_1px,transparent_1px),linear-gradient(to_bottom,#15241d08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-10 pointer-events-none" />
@@ -92,7 +94,7 @@ const BlogPage = (props: Props) => {
               Back to Blog
             </Link>
 
-            <div className="mx-auto max-w-4xl">
+            <div className="">
               {/* Category */}
               <div className="mb-5 flex items-center gap-2">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-gray-700">
@@ -121,10 +123,17 @@ const BlogPage = (props: Props) => {
 
               {/* Meta */}
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-500">
-                <div className="flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  <span>{blog.author}</span>
-                </div>
+                {blog.author && (
+                  <div className="flex items-center gap-2">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-xs font-semibold text-blue-700">
+                      {blog.author.charAt(0).toUpperCase()}
+                    </div>
+
+                    <span className="font-medium text-slate-700">
+                      {blog.author}
+                    </span>
+                  </div>
+                )}
 
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
@@ -160,7 +169,7 @@ const BlogPage = (props: Props) => {
         )}
 
         {/* Content */}
-        <section className="mx-auto max-w-4xl py-12 ">
+        <section className="py-12 ">
           <article
             className="
             prose
