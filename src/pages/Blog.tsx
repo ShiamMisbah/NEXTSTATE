@@ -13,9 +13,9 @@ import {
   Sparkles,
   TrendingUp,
 } from "lucide-react";
-import BlogCard from "../components/layout/blog/GlobalBlogContent/BlogCard";
-import FeaturedBlogCard from "../components/layout/blog/GlobalBlogContent/FeaturedBlogCard";
-import BlogSidebar from "../components/layout/blog/GlobalBlogContent/BlogSidebar";
+import BlogCard from "../components/layout/AdminDashboard/blog/GlobalBlogContent/BlogCard";
+import FeaturedBlogCard from "../components/layout/AdminDashboard/blog/GlobalBlogContent/FeaturedBlogCard";
+import BlogSidebar from "../components/layout/AdminDashboard/blog/GlobalBlogContent/BlogSidebar";
 import { useBlogs } from "../hooks/useBlogs";
 import { BLOG_CATEGORIES } from "../lib/BlogTypes";
 import Pagination from "../components/ui/Pagination";

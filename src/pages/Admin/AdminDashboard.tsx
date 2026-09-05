@@ -7,28 +7,6 @@ import GetToken from "../GetToken";
 
 const AdminDashboard = () => {
 
-
-  const recentNews: RecentContent[] = [
-    {
-      title: "SoftCo Announces New Technology Partnership",
-      category: "Company News",
-      status: "Published",
-      date: "Sep 2, 2026",
-    },
-    {
-      title: "SoftCo Expands Its Digital Solutions Team",
-      category: "Company News",
-      status: "Published",
-      date: "Aug 30, 2026",
-    },
-    {
-      title: "New AI Services Coming Soon",
-      category: "Announcements",
-      status: "Draft",
-      date: "Aug 27, 2026",
-    },
-  ];
-
   return (
     <div className="bg-ivory text-charcoal min-h-screen pt-32 pb-24 overflow-hidden selection:bg-emerald/10 selection:text-emerald relative">
       {/* <CustomCursor theme="light" /> */}

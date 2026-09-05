@@ -1,22 +1,39 @@
-import { Blog } from '@/src/lib/BlogTypes';
+import { Blog, BlogStats } from '@/src/lib/BlogTypes';
+import { NewsStats } from '@/src/lib/NewsTypes';
 import { Eye, EyeOff, FileText, Star } from 'lucide-react';
 import React from 'react'
 
-type Props = {
-    blogs: Blog[]
-}
+type Props =
+  | {
+      contentStat: BlogStats;
+      type: "blog";
+    }
+  | {
+      contentStat: NewsStats;
+      type: "news";
+    };
 
-const BlogListStat = ({blogs}: Props) => {
+const ContentListStat = ({contentStat, type}: Props) => {
   return (
     <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
       <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-slate-500">Total Blogs</p>
-
-            <p className="mt-2 text-2xl font-bold text-slate-900">
-              {blogs.length}
+            <p className="text-sm text-slate-500">
+              Total {type === "blog" ? "Blogs" : "News"}
             </p>
+
+            {type === "blog" && (
+              <p className="mt-2 text-2xl font-bold text-slate-900">
+                {contentStat.totalBlogs}
+              </p>
+            )}
+
+            {type === "news" && (
+              <p className="mt-2 text-2xl font-bold text-slate-900">
+                {contentStat.totalNews}
+              </p>
+            )}
           </div>
 
           <div className="rounded-lg bg-slate-100 p-3">
@@ -31,7 +48,7 @@ const BlogListStat = ({blogs}: Props) => {
             <p className="text-sm text-slate-500">Published</p>
 
             <p className="mt-2 text-2xl font-bold text-emerald-600">
-              {blogs.filter((blog) => blog.published).length}
+              {contentStat.totalPublished}
             </p>
           </div>
 
@@ -47,7 +64,7 @@ const BlogListStat = ({blogs}: Props) => {
             <p className="text-sm text-slate-500">Drafts</p>
 
             <p className="mt-2 text-2xl font-bold text-slate-600">
-              {blogs.filter((blog) => !blog.published).length}
+              {contentStat.totalDrafts}
             </p>
           </div>
 
@@ -57,13 +74,13 @@ const BlogListStat = ({blogs}: Props) => {
         </div>
       </div>
 
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+      {type === "blog" && <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-slate-500">Featured</p>
 
             <p className="mt-2 text-2xl font-bold text-amber-500">
-              {blogs.filter((blog) => blog.featured).length}
+              {contentStat.totalFeatured}
             </p>
           </div>
 
@@ -71,9 +88,9 @@ const BlogListStat = ({blogs}: Props) => {
             <Star size={20} className="text-amber-500" />
           </div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }
 
-export default BlogListStat
+export default ContentListStat;

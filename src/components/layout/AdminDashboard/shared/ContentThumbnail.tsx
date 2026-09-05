@@ -1,19 +1,26 @@
 import { Blog } from '@/src/lib/BlogTypes';
+import { News } from '@/src/lib/NewsTypes';
 import { FileText, Star } from 'lucide-react';
 import React from 'react'
 
-type Props = {
-    blog: Blog
-}
+type Props =
+  | {
+      content: Blog;
+      type: "blog";
+    }
+  | {
+      content: News;
+      type: "news";
+    };
 
-const BlogThumbnail = ({blog}: Props) => {
+const ContentThumbnail = ({ content, type }: Props) => {
   return (
     <div className="flex items-center gap-3">
       {/* Image */}
-      {blog.image ? (
+      {content.image ? (
         <img
-          src={blog.image}
-          alt={blog.title}
+          src={content.image}
+          alt={content.title}
           className="h-14 w-20 shrink-0 rounded-lg object-cover"
         />
       ) : (
@@ -26,12 +33,12 @@ const BlogThumbnail = ({blog}: Props) => {
         <div className="flex items-center gap-2">
           <p
             className="truncate text-sm font-semibold text-slate-900"
-            title={blog.title}
+            title={content.title}
           >
-            {blog.title}
+            {content.title}
           </p>
 
-          {blog.featured && (
+          {type === "blog" && content.featured && (
             <Star
               size={14}
               fill="currentColor"
@@ -40,12 +47,20 @@ const BlogThumbnail = ({blog}: Props) => {
           )}
         </div>
 
-        <p className="mt-1 line-clamp-1 text-xs text-slate-500">
-          {blog.excerpt}
-        </p>
+        {type === "blog" && (
+          <p className="mt-1 line-clamp-1 text-xs text-slate-500">
+            {content.excerpt}
+          </p>
+        )}
+
+        {type === "news" && (
+          <p className="mt-1 line-clamp-1 text-xs text-slate-500">
+            {content.summary}
+          </p>
+        )}
       </div>
     </div>
   );
-}
+};
 
-export default BlogThumbnail
+export default ContentThumbnail

@@ -5,7 +5,8 @@ import React from 'react'
 
 export interface RecentContent {
   title: string;
-  category: string;
+  author: string;
+  category?: string;
   date: string;
   status: "Published" | "Draft";
 }
@@ -26,7 +27,11 @@ const RecentContentCard = ({content}: Props) => {
         </h3>
 
         <div className="mt-2 flex items-center gap-3 text-xs text-gray-500">
-          <span>{content.category}</span>
+          {content.category ? (
+            <span>{content.category}</span>
+          ) : (
+            <span>{content.author}</span>
+          )}
           <span>•</span>
           <span>{content.date}</span>
         </div>

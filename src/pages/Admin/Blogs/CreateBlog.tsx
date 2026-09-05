@@ -1,9 +1,9 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useUser } from "@clerk/react";
-import BlogHeader from "../../../components/layout/blog/BlogForm/BlogHeader";
-import BlogSidebar from "../../../components/layout/blog/BlogForm/BlogSidebar";
-import BlogMainForm from "../../../components/layout/blog/BlogForm/BlogMainForm";
+import BlogHeader from "../../../components/layout/AdminDashboard/blog/BlogForm/BlogHeader";
+import BlogSidebar from "../../../components/layout/AdminDashboard/blog/BlogForm/BlogSidebar";
+import BlogMainForm from "../../../components/layout/AdminDashboard/blog/BlogForm/BlogMainForm";
 import { BlogForm } from "@/src/lib/BlogTypes";
 
 const CreateBlog = () => {

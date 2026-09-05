@@ -52,3 +52,11 @@ export interface BlogsResponse {
   data: Blog[];
   pagination: BlogPagination;
 }
+
+export interface BlogStats {
+  totalBlogs: number;
+  totalPublished: number;
+  totalDrafts: number;
+  totalFeatured: number;
+  totalViews: number;
+}

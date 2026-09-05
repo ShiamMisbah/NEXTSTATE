@@ -1,15 +1,18 @@
 import { Calendar, FileText, Loader2 } from 'lucide-react';
 import React, { Dispatch, SetStateAction } from 'react'
-import ActionButtonSet from './BlogListCard/ActionButtonSet';
-import BlogThumbnail from './BlogListCard/BlogThumbnail';
+import ActionButtonSet from './ActionButtonSet';
+import BlogThumbnail from '../../shared/ContentThumbnail';
 import { Blog } from '@/src/lib/BlogTypes';
 import { formatDate } from '@/src/pages/Admin/Blogs/AdminBlogs';
+import Loading from '@/src/components/ui/Loading';
+import Empty from '@/src/components/ui/Empty';
+import ContentThumbnail from '../../shared/ContentThumbnail';
 
 type Props = {
-    loading: boolean
-    filteredBlogs: Blog[]
-    setBlogs: Dispatch<SetStateAction<Blog[]>>
-}
+  loading: boolean;
+  filteredBlogs: Blog[];
+  setBlogs: Dispatch<SetStateAction<Blog[]>>;
+};
 
 const DesktopBlogListTable = ({ loading, filteredBlogs, setBlogs }: Props) => {
   return (
@@ -46,24 +49,13 @@ const DesktopBlogListTable = ({ loading, filteredBlogs, setBlogs }: Props) => {
         {loading ? (
           <tr>
             <td colSpan={6} className="py-20 text-center">
-              <Loader2
-                size={24}
-                className="mx-auto animate-spin text-slate-400"
-              />
-
-              <p className="mt-3 text-sm text-slate-500">Loading blogs...</p>
+              <Loading content="Loading Blogs ..." />
             </td>
           </tr>
         ) : filteredBlogs.length === 0 ? (
           <tr>
             <td colSpan={6} className="py-20 text-center">
-              <FileText size={40} className="mx-auto text-slate-300" />
-
-              <p className="mt-3 font-medium text-slate-600">No blogs found</p>
-
-              <p className="mt-1 text-sm text-slate-400">
-                Try changing your search or filters.
-              </p>
+              <Empty content="No blogs found" />
             </td>
           </tr>
         ) : (
@@ -71,7 +63,7 @@ const DesktopBlogListTable = ({ loading, filteredBlogs, setBlogs }: Props) => {
             <tr key={blog._id} className="transition hover:bg-slate-50">
               {/* Blog */}
               <td className="max-w-md px-5 py-4">
-                <BlogThumbnail blog={blog} />
+                <ContentThumbnail type='blog' content={blog} />
               </td>
 
               {/* Category */}

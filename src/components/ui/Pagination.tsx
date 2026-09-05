@@ -1,8 +1,9 @@
 import { BlogPagination } from '@/src/lib/BlogTypes';
+import { NewsPagination } from '@/src/lib/NewsTypes';
 import React from 'react'
 
 type Props = {
-    pagination: BlogPagination
+    pagination: BlogPagination | NewsPagination
     previousPage: () => void
     nextPage: () => void
 }

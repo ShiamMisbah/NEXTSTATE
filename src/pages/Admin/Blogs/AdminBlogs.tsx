@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  Loader2,
-  FileText,
-} from "lucide-react";
-import { Blog } from "@/src/lib/BlogTypes";
+import { Blog, BlogStats } from "@/src/lib/BlogTypes";
 import { useBlogs } from "@/src/hooks/useBlogs";
 import Pagination from "@/src/components/ui/Pagination";
-import BlogListHeader from "@/src/components/layout/blog/AdminBlogList/BlogListHeader";
-import BlogListStat from "@/src/components/layout/blog/AdminBlogList/BlogListStat";
-import BlogListFilter from "@/src/components/layout/blog/AdminBlogList/BlogListFilter";
-import DesktopBlogListTable from "@/src/components/layout/blog/AdminBlogList/DesktopBlogListTable";
-import MobileBlogCard from "@/src/components/layout/blog/AdminBlogList/MobileBlogCard";
+import BlogListFilter from "@/src/components/layout/AdminDashboard/blog/AdminBlogList/BlogListFilter";
+import DesktopBlogListTable from "@/src/components/layout/AdminDashboard/blog/AdminBlogList/DesktopBlogListTable";
+import MobileBlogCard from "@/src/components/layout/AdminDashboard/shared/MobileContentCard";
+import Loading from "@/src/components/ui/Loading";
+import Empty from "@/src/components/ui/Empty";
+import ContentListStat from "@/src/components/layout/AdminDashboard/shared/ContentListStat";
+import ContentListHeader from "@/src/components/layout/AdminDashboard/shared/ContentListHeader";
+import MobileContentCard from "@/src/components/layout/AdminDashboard/shared/MobileContentCard";
 
 export const formatDate = (date: string) => {
   return new Date(date).toLocaleDateString("en-US", {
@@ -19,6 +17,14 @@ export const formatDate = (date: string) => {
     month: "short",
     day: "numeric",
   });
+};
+
+const dummyContentStat : BlogStats = {
+  totalBlogs: 0,
+  totalPublished: 0,
+  totalDrafts: 0,
+  totalFeatured: 0,
+  totalViews: 0,
 };
 
 const AdminBlogs = () => {
@@ -61,10 +67,15 @@ const AdminBlogs = () => {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#15241d08_1px,transparent_1px),linear-gradient(to_bottom,#15241d08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-10 pointer-events-none" />
 
         {/* Header */}
-        <BlogListHeader />
+        <ContentListHeader
+          heading="Blogs"
+          subheading="Manage your blog articles."
+          actionButton="Create Blog"
+          actionButtonTarget="blog"
+        />
 
         {/* Stats */}
-        <BlogListStat blogs={readableBlogs} />
+        <ContentListStat contentStat={dummyContentStat} type="blog" />
 
         {/* Filters */}
         <BlogListFilter
@@ -87,46 +98,29 @@ const AdminBlogs = () => {
             />
 
             {pagination && (
-              <Pagination nextPage={nextPage} pagination={pagination} previousPage={previousPage} />
+              <Pagination
+                nextPage={nextPage}
+                pagination={pagination}
+                previousPage={previousPage}
+              />
             )}
           </div>
 
-          {/* =========================================
-              MOBILE LIST
-          ========================================= */}
+          {/* Mobile Card */}
           <div className="md:hidden">
             {loading ? (
-              <div className="py-20 text-center">
-                <Loader2
-                  size={24}
-                  className="mx-auto animate-spin text-slate-400"
-                />
-
-                <p className="mt-3 text-sm text-slate-500">Loading blogs...</p>
-              </div>
+              <Loading content="Loading Blogs ..." />
             ) : filteredBlogs.length === 0 ? (
-              <div className="py-20 text-center">
-                <FileText size={40} className="mx-auto text-slate-300" />
-
-                <p className="mt-3 font-medium text-slate-600">
-                  No blogs found
-                </p>
-              </div>
+              <Empty content="No blogs found" />
             ) : (
-              <MobileBlogCard
-                filteredBlogs={filteredBlogs}
-                setBlogs={setReadableBlogs}
+              <MobileContentCard
+                  filteredContent={filteredBlogs}
+                  setContent={setReadableBlogs}
+                  type="blog"
               />
             )}
           </div>
         </div>
-
-        {/* Result count */}
-        {!loading && (
-          <div className="mt-4 text-sm text-slate-400">
-            Showing {filteredBlogs.length} of {readableBlogs.length} blogs
-          </div>
-        )}
       </div>
     </div>
   );

@@ -1,19 +1,20 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
-import RecentContentCard, { RecentContent } from './RecentContentCard';
-import { useBlogs } from '@/src/hooks/useBlogs';
-import { Blog } from '@/src/lib/BlogTypes';
-import Pagination from '@/src/components/ui/Pagination';
-import { FileText, Loader2 } from 'lucide-react';
-
-
+import React from "react";
+import { Link } from "react-router-dom";
+import RecentContentCard, { RecentContent } from "./RecentContentCard";
+import { useBlogs } from "@/src/hooks/useBlogs";
+import { Blog } from "@/src/lib/BlogTypes";
+import Pagination from "@/src/components/ui/Pagination";
+import { FileText, Loader2 } from "lucide-react";
+import { useNews } from "@/src/hooks/useNews";
+import { useRecentContent } from "@/src/hooks/useRecentContent";
+import { News } from "@/src/lib/NewsTypes";
 
 type Props = {
   cardTitle: string;
   cardSubtitle: string;
   targetLink: "blog" | "news";
   contentType: "blog" | "news";
-}
+};
 
 export const mapBlogToRecentContent = (blog: Blog): RecentContent => ({
   title: blog.title,
@@ -24,13 +25,34 @@ export const mapBlogToRecentContent = (blog: Blog): RecentContent => ({
     day: "numeric",
   }),
   status: blog.published ? "Published" : "Draft",
+  author: blog.author,
 });
 
-const RecentBlogCollection = ({cardTitle, cardSubtitle, targetLink}: Props) => {
-  const { blogs, pagination, loading, error, nextPage, previousPage } =
-    useBlogs({ limit: 2 });
+export const mapNewsToRecentContent = (news: News): RecentContent => ({
+  title: news.title,
+  date: new Date(news.createdAt).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }),
+  status: news.published ? "Published" : "Draft",
+  author: news.author,
+});
 
-  const recentContent = blogs.map(mapBlogToRecentContent);
+const RecentBlogCollection = ({
+  cardTitle,
+  cardSubtitle,
+  targetLink,
+  contentType,
+}: Props) => {
+  const { content, pagination, loading, error, nextPage, previousPage } =
+    useRecentContent({ contentType, limit: 2 });
+    
+  const recentContent: RecentContent[] = contentType === "blog"
+    ? (content as Blog[]).map(mapBlogToRecentContent)
+    : (content as News[]).map(mapNewsToRecentContent);
+
+
 
   return (
     <div className="rounded-xl border border-gray-200 bg-white">
@@ -47,7 +69,7 @@ const RecentBlogCollection = ({cardTitle, cardSubtitle, targetLink}: Props) => {
           <p className="mt-3 font-medium text-slate-600">No blogs found</p>
         </div>
       ) : (
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col justify-between h-full">
           <div>
             <div className="flex items-center justify-between border-b border-gray-100 p-5">
               <div>
@@ -80,6 +102,6 @@ const RecentBlogCollection = ({cardTitle, cardSubtitle, targetLink}: Props) => {
       )}
     </div>
   );
-}
+};
 
-export default RecentBlogCollection
+export default RecentBlogCollection;

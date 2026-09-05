@@ -1,19 +1,25 @@
 import { Blog } from '@/src/lib/BlogTypes';
+import { News } from '@/src/lib/NewsTypes';
 import { FileText, Star } from 'lucide-react';
 import React from 'react'
 
-type Props = {
-    blog: Blog;
-}
+type Props = | {
+      content: Blog;
+      type: "blog";
+    }
+  | {
+      content: News;
+      type: "news";
+    };
 
-const MobileBlogThumbnail = ({blog}: Props) => {
+const MobileContentThumbnail = ({ content , type}: Props) => {
   return (
     <div className="flex gap-3">
       {/* Image */}
-      {blog.image ? (
+      {content.image ? (
         <img
-          src={blog.image}
-          alt={blog.title}
+          src={content.image}
+          alt={content.title}
           className="h-20 w-24 shrink-0 rounded-lg object-cover"
         />
       ) : (
@@ -25,10 +31,10 @@ const MobileBlogThumbnail = ({blog}: Props) => {
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-2">
           <h3 className="line-clamp-2 text-sm font-semibold text-slate-900">
-            {blog.title}
+            {content.title}
           </h3>
 
-          {blog.featured && (
+          {type === "blog" && content.featured && (
             <Star
               size={15}
               fill="currentColor"
@@ -38,23 +44,24 @@ const MobileBlogThumbnail = ({blog}: Props) => {
         </div>
 
         <div className="mt-2 flex flex-wrap items-center gap-2">
-          <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium text-slate-600">
-            {blog.category}
-          </span>
-
+          {type === "blog" && (
+            <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium text-slate-600">
+              {content.category}
+            </span>
+          )}
           <span
             className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
-              blog.published
+              content.published
                 ? "bg-emerald-100 text-emerald-700"
                 : "bg-slate-100 text-slate-600"
             }`}
           >
-            {blog.published ? "Published" : "Draft"}
+            {content.published ? "Published" : "Draft"}
           </span>
         </div>
       </div>
     </div>
   );
-}
+};
 
-export default MobileBlogThumbnail
+export default MobileContentThumbnail;
