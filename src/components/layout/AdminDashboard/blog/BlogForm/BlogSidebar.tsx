@@ -81,7 +81,7 @@ const BlogSidebar = ({form, loading, updateField, isEditMode = false}: Props) =>
               type="button"
               onClick={() => updateField("published", !form.published)}
               className={`relative h-6 w-11 rounded-full transition ${
-                form.published ? "bg-emerald" : "bg-emerald-bright"
+                form.published ? "bg-emerald" : "bg-slate-400"
               }`}
             >
               <span
@@ -106,7 +106,7 @@ const BlogSidebar = ({form, loading, updateField, isEditMode = false}: Props) =>
               type="button"
               onClick={() => updateField("featured", !form.featured)}
               className={`relative h-6 w-11 rounded-full transition ${
-                form.featured ? "bg-emerald" : "bg-emerald-bright"
+                form.featured ? "bg-emerald" : "bg-slate-400"
               }`}
             >
               <span

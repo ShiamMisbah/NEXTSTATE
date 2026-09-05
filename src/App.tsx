@@ -25,7 +25,6 @@ import AdminBlogs from "./pages/Admin/Blogs/AdminBlogs";
 import CreateBlog from "./pages/Admin/Blogs/CreateBlog";
 import AdminNews from "./pages/Admin/News/AdminNews";
 import CreateNews from "./pages/Admin/News/CreateNews";
-import EditNews from "./pages/Admin/News/EditNews";
 import Categories from "./pages/Admin/Categories";
 
 function ScrollToTop() {
@@ -71,7 +70,7 @@ export default function App() {
 
               <Route path="/admin/news" element={<AdminNews />} />
               <Route path="/admin/news/create" element={<CreateNews />} />
-              <Route path="/admin/news/:newsId/edit" element={<EditNews />} />
+              <Route path="/admin/news/:newsId/edit" element={<CreateNews />} />
 
               <Route path="/admin/categories" element={<Categories />} />
             </Route>

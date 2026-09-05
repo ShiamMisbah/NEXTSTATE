@@ -122,7 +122,7 @@ const BlogMainForm = ({ form, loading, updateField, setForm }: Props) => {
 
             <textarea
               id="content"
-              rows={20}
+              rows={8}
               placeholder="Write your blog content here..."
               value={form.content}
               onChange={(e) => updateField("content", e.target.value)}

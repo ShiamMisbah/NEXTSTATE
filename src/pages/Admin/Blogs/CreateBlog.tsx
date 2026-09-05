@@ -23,11 +23,11 @@ const CreateBlog = () => {
     image: "",
     readTime: "5 min read",
     featured: false,
-    published: true,
+    published: false,
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const updateField = <K extends keyof BlogForm>(
     field: K,
@@ -41,6 +41,7 @@ const CreateBlog = () => {
 
   useEffect(() => {
     if (!blogId) return;
+    setError(null)
 
     const fetchBlog = async () => {
       try {
@@ -86,7 +87,7 @@ const CreateBlog = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    setError("");
+    setError(null);
 
     if (!user) {
       setError("You must be logged in to create a blog.");
@@ -161,7 +162,7 @@ const CreateBlog = () => {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#15241d08_1px,transparent_1px),linear-gradient(to_bottom,#15241d08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-10 pointer-events-none" />
 
         {/* Header */}
-        <BlogHeader isEditMode={isEditMode} loading={loading} />
+        <BlogHeader isEditMode={isEditMode} slug={form.slug} />
 
         {/* Error */}
         {error && (

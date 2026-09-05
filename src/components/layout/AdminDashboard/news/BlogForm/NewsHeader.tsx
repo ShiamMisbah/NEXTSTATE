@@ -1,3 +1,4 @@
+import { NewsForm } from '@/src/lib/NewsTypes';
 import { ArrowLeft, Eye, Loader2, Save, Send } from 'lucide-react';
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
@@ -5,39 +6,39 @@ import { useNavigate } from 'react-router-dom';
 
 
 type Props = {
-  isEditMode: boolean;
-  slug: string;
-};
+    isEditMode: boolean;
+    slug: string;
+}
 
-const BlogHeader = ({isEditMode = false, slug}: Props) => {
-    const navigate = useNavigate();
+const NewsHeader = ({ isEditMode = false, slug }: Props) => {
+  const navigate = useNavigate();
   return (
-    <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mb-6 flex items-center justify-between">
       <div>
         <button
           type="button"
-          onClick={() => navigate("/admin/blog")}
-          className="mb-3 flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-slate-900"
+          onClick={() => navigate("/admin/news")}
+          className="mb-3 flex items-center gap-2 text-sm text-slate-500 transition hover:text-slate-900"
         >
           <ArrowLeft size={16} />
-          Back to Blogs
+          Back to News
         </button>
 
-        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
-          {isEditMode ? "Edit Blog" : "Create Blog"}
+        <h1 className="text-2xl font-bold text-slate-900">
+          {isEditMode ? "Edit News" : "Create News"}
         </h1>
 
         <p className="mt-1 text-sm text-slate-500">
           {isEditMode
-            ? "Update your blog article."
-            : "Create and publish a new article."}
+            ? "Update your news article."
+            : "Create and publish a new news article."}
         </p>
       </div>
 
       {isEditMode && (
         <button
           type="button"
-          onClick={() => window.open(`/blog/${slug}`, "_blank")}
+          onClick={() => window.open(`/news/${slug}`, "_blank")}
           className="hidden items-center gap-2 rounded-lg border bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 sm:flex"
         >
           <Eye size={16} />
@@ -46,6 +47,6 @@ const BlogHeader = ({isEditMode = false, slug}: Props) => {
       )}
     </div>
   );
-}
+};
 
-export default BlogHeader
+export default NewsHeader

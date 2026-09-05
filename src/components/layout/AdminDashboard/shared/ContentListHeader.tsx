@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react';
+import { ArrowLeft, Plus } from 'lucide-react';
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
@@ -14,11 +14,20 @@ const ContentListHeader = ({actionButton, actionButtonTarget, heading, subheadin
   return (
     <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">{heading}</h1>
+        <button
+          type="button"
+          onClick={() => navigate("/admin")}
+          className="mb-3 flex items-center gap-2 text-sm text-slate-500 transition hover:text-slate-900"
+        >
+          <ArrowLeft size={16} />
+          Back to Dashboard
+        </button>
+        
+        <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+          {heading}
+        </h1>
 
-        <p className="mt-1 text-sm text-slate-500">
-          {subheading}
-        </p>
+        <p className="mt-1 text-sm text-slate-500">{subheading}</p>
       </div>
 
       <button
