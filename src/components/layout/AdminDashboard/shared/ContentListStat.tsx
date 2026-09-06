@@ -1,19 +1,44 @@
+import { useContentStats } from '@/src/hooks/useContentStats';
 import { Blog, BlogStats } from '@/src/lib/BlogTypes';
 import { NewsStats } from '@/src/lib/NewsTypes';
 import { Eye, EyeOff, FileText, Star } from 'lucide-react';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
+interface contentStat 
+{
+    total: number,
+    published: number,
+    drafts: number,
+    featured?: number
+}
 
 type Props =
   | {
-      contentStat: BlogStats;
       type: "blog";
     }
   | {
-      contentStat: NewsStats;
       type: "news";
     };
 
-const ContentListStat = ({contentStat, type}: Props) => {
+const ContentListStat = ({type}: Props) => {
+  const { isLoading, stats, error } = useContentStats()
+  const [contentStat, setContentStat] = useState<contentStat | null>()
+
+  useEffect(() => {
+    if (stats) {
+      if (type === "blog") {
+        setContentStat(stats.blogs);
+        return;
+      }
+
+      if (type === "news") {
+        setContentStat(stats.news);
+        return;
+      }
+    }
+    
+  }, [type, stats])
+  
   return (
     <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
       <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -23,17 +48,9 @@ const ContentListStat = ({contentStat, type}: Props) => {
               Total {type === "blog" ? "Blogs" : "News"}
             </p>
 
-            {type === "blog" && (
-              <p className="mt-2 text-2xl font-bold text-slate-900">
-                {contentStat.totalBlogs}
-              </p>
-            )}
-
-            {type === "news" && (
-              <p className="mt-2 text-2xl font-bold text-slate-900">
-                {contentStat.totalNews}
-              </p>
-            )}
+            <p className="mt-2 text-2xl font-bold text-slate-900">
+              {contentStat?.total}
+            </p>
           </div>
 
           <div className="rounded-lg bg-slate-100 p-3">
@@ -48,7 +65,7 @@ const ContentListStat = ({contentStat, type}: Props) => {
             <p className="text-sm text-slate-500">Published</p>
 
             <p className="mt-2 text-2xl font-bold text-emerald-600">
-              {contentStat.totalPublished}
+              {contentStat?.published}
             </p>
           </div>
 
@@ -64,7 +81,7 @@ const ContentListStat = ({contentStat, type}: Props) => {
             <p className="text-sm text-slate-500">Drafts</p>
 
             <p className="mt-2 text-2xl font-bold text-slate-600">
-              {contentStat.totalDrafts}
+              {contentStat?.drafts}
             </p>
           </div>
 
@@ -74,21 +91,23 @@ const ContentListStat = ({contentStat, type}: Props) => {
         </div>
       </div>
 
-      {type === "blog" && <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-sm text-slate-500">Featured</p>
+      {type === "blog" && (
+        <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-slate-500">Featured</p>
 
-            <p className="mt-2 text-2xl font-bold text-amber-500">
-              {contentStat.totalFeatured}
-            </p>
-          </div>
+              <p className="mt-2 text-2xl font-bold text-amber-500">
+                {contentStat?.featured}
+              </p>
+            </div>
 
-          <div className="rounded-lg bg-amber-50 p-3">
-            <Star size={20} className="text-amber-500" />
+            <div className="rounded-lg bg-amber-50 p-3">
+              <Star size={20} className="text-amber-500" />
+            </div>
           </div>
         </div>
-      </div>}
+      )}
     </div>
   );
 }

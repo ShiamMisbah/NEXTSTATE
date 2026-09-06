@@ -122,7 +122,7 @@ export const createNews = async (req: Request, res: Response) => {
     }
 
     // You can replace this with Clerk user information
-    const author = user.username;
+    const author = user.fullName;
 
     if (!author) {
       return res.status(400).json({
@@ -208,8 +208,7 @@ export const updateNews = async (req: Request, res: Response) => {
     // the update to the current Clerk user.
     const user = await clerkClient.users.getUser(userId);
 
-    const author =
-      user.username || user.firstName || user.emailAddresses?.[0]?.emailAddress;
+    const author = user.fullName;
 
     if (author) {
       news.author = author;

@@ -17,24 +17,25 @@ const ADStatCard = ({ stat }: Props) => {
   return (
     <div
       key={stat.title}
-      className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
+      className="rounded-lg border border-gray-200 bg-white p-3 shadow-sm"
     >
-      <div className="flex items-center justify-between">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100">
-          <Icon className="h-5 w-5 text-emerald" />
+      <div className="flex justify-between items-center gap-5">
+        <div className="flex-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-gray-100">
+          <Icon className="h-4 w-4 text-emerald" />
         </div>
 
-        <ArrowUpRight className="h-4 w-4 text-gray-400" />
-      </div>
+        <div className="flex-2 min-w-0 flex flex-col justify-center gap-2">
+          <p className="text-xs md:text-md text-gray-500">{stat.title}</p>
 
-      <div className="mt-4">
-        <p className="text-sm text-gray-500">{stat.title}</p>
-
-        <p className="mt-1 text-2xl font-semibold text-gray-900">
-          {stat.value}
-        </p>
-
-        <p className="mt-1 text-xs text-gray-500">{stat.description}</p>
+          <p className=" truncate text-[11px] text-gray-400">
+            {stat.description}
+          </p>
+        </div>
+        <div className="flex-1">
+          <p className="text-3xl font-semibold leading-tight text-emerald">
+            {stat.value}
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -3,6 +3,8 @@ import cors from "cors";
 import { clerkMiddleware } from "@clerk/express";
 import blogRoutes from "./routes/blog.routes";
 import newsRoutes from "./routes/news.routes";
+import statsRoutes from "./routes/stats.routes";
+
 
 
 const app = express();
@@ -20,5 +22,6 @@ app.use(clerkMiddleware());
 
 app.use("/api/blog", blogRoutes);
 app.use("/api/news", newsRoutes);
+app.use("/api/stats", statsRoutes);
 
 export default app;

@@ -9,6 +9,7 @@ type Props = {
 }
 
 const Pagination = ({pagination, previousPage, nextPage}: Props) => {
+  if (pagination.totalPages <= 1) return (<></>)
   return (
     <div className="mt-6 rounded-xl bg-card p-4">
       <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">

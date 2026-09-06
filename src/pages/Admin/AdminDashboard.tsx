@@ -10,8 +10,7 @@ const AdminDashboard = () => {
   return (
     <div className="bg-ivory text-charcoal min-h-screen pt-32 pb-24 overflow-hidden selection:bg-emerald/10 selection:text-emerald relative">
       {/* <CustomCursor theme="light" /> */}
-      <GetToken />
-
+      
       <div className="container px-6 md:px-12 mx-auto max-w-6xl space-y-8 relative z-10">
         {/* Decorative Grid Accents */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#15241d08_1px,transparent_1px),linear-gradient(to_bottom,#15241d08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-10 pointer-events-none" />
@@ -23,7 +22,7 @@ const AdminDashboard = () => {
         <ADStatCollection />
 
         {/* Content management */}
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-6 grid-cols-1 lg:grid-cols-2">
           {/* Recent Blogs */}
           <RecentBlogCollection
             cardTitle="Recent Blogs"

@@ -75,7 +75,7 @@ const AdminBlogs = () => {
         />
 
         {/* Stats */}
-        <ContentListStat contentStat={dummyContentStat} type="blog" />
+        <ContentListStat type="blog" />
 
         {/* Filters */}
         <BlogListFilter

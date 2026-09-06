@@ -63,7 +63,7 @@ const AdminNews = (props: Props) => {
         />
 
         {/* Stats */}
-        <ContentListStat contentStat={dummyContentStat} type="news" />
+        <ContentListStat type="news" />
 
         {/* Filters */}
         <NewsListFilter

@@ -9,7 +9,6 @@ import {
   deleteNews,
 } from "../controllers/news.controller";
 
-import { authMiddleware } from "../middleware/auth.middleware";
 import { requireAuth } from "@clerk/express";
 
 const router = Router();
