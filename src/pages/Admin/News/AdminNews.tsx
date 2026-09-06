@@ -1,27 +1,25 @@
 import DesktopBlogListTable from '@/src/components/layout/AdminDashboard/blog/AdminBlogList/DesktopBlogListTable';
 import MobileBlogCard from '@/src/components/layout/AdminDashboard/shared/MobileContentCard';
 import ContentListHeader from '@/src/components/layout/AdminDashboard/shared/ContentListHeader';
-import ContentListStat from '@/src/components/layout/AdminDashboard/shared/ContentListStat';
+import ContentListStat, { ContentListStatRef } from '@/src/components/layout/AdminDashboard/shared/ContentListStat';
 import Empty from '@/src/components/ui/Empty';
 import Loading from '@/src/components/ui/Loading';
 import Pagination from '@/src/components/ui/Pagination';
 import { useNews } from '@/src/hooks/useNews';
 import { News, NewsStats } from '@/src/lib/NewsTypes';
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import MobileContentCard from '@/src/components/layout/AdminDashboard/shared/MobileContentCard';
 import NewsListFilter from '@/src/components/layout/AdminDashboard/news/AdminNewsList/NewsListFilter';
 import DesktopNewsListTable from '@/src/components/layout/AdminDashboard/news/AdminNewsList/DesktopNewsListTable';
 
 type Props = {}
 
-const dummyContentStat : NewsStats = {
-  totalNews: 0,
-  totalPublished: 0,
-  totalDrafts: 0,
-  totalViews: 0,
-};
-
 const AdminNews = (props: Props) => {
+  const statsRef = useRef<ContentListStatRef>(null);
+
+  const handleRefetchStats = () => {
+    statsRef.current?.refetch();
+  };
 
   const  {news, pagination, loading, error, nextPage, previousPage} = useNews()
 
@@ -63,7 +61,7 @@ const AdminNews = (props: Props) => {
         />
 
         {/* Stats */}
-        <ContentListStat type="news" />
+        <ContentListStat ref={statsRef} type="news" />
 
         {/* Filters */}
         <NewsListFilter
@@ -81,6 +79,7 @@ const AdminNews = (props: Props) => {
               loading={loading}
               filteredNews={filteredNews}
               setNews={setReadableNews}
+              refetch={handleRefetchStats}
             />
 
             {pagination && (
@@ -102,7 +101,8 @@ const AdminNews = (props: Props) => {
               <MobileContentCard
                 filteredContent={filteredNews}
                 setContent={setReadableNews}
-                type='news'
+                refetch={handleRefetchStats}
+                type="news"
               />
             )}
           </div>

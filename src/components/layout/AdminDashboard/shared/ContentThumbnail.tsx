@@ -1,6 +1,6 @@
 import { Blog } from '@/src/lib/BlogTypes';
 import { News } from '@/src/lib/NewsTypes';
-import { FileText, Star } from 'lucide-react';
+import { Eye, FileText, Star } from 'lucide-react';
 import React from 'react'
 
 type Props =
@@ -58,6 +58,10 @@ const ContentThumbnail = ({ content, type }: Props) => {
             {content.summary}
           </p>
         )}
+        <div className="mt-1 flex gap-2 items-center text-slate-500">
+          <Eye size={12} />
+          <p className="line-clamp-1 text-xs ">{content.views}</p>
+        </div>
       </div>
     </div>
   );

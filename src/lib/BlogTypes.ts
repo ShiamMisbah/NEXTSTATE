@@ -36,6 +36,7 @@ export interface Blog {
   published: boolean;
   createdAt: string;
   updatedAt: string;
+  views: number;
 }
 
 export interface BlogPagination {

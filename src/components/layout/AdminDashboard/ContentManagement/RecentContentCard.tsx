@@ -1,4 +1,5 @@
 import { Blog } from '@/src/lib/BlogTypes';
+import { Eye } from 'lucide-react';
 import React from 'react'
 
 
@@ -9,6 +10,7 @@ export interface RecentContent {
   category?: string;
   date: string;
   status: "Published" | "Draft";
+  views: number;
 }
 
 type Props = {
@@ -27,6 +29,11 @@ const RecentContentCard = ({content}: Props) => {
         </h3>
 
         <div className="mt-2 flex items-center gap-3 text-xs text-gray-500">
+          <span className="flex gap-2 items-center">
+            <Eye size={12} />
+            {content.views}
+          </span>
+          <span>•</span>
           {content.category ? (
             <span>{content.category}</span>
           ) : (
@@ -34,6 +41,7 @@ const RecentContentCard = ({content}: Props) => {
           )}
           <span>•</span>
           <span>{content.date}</span>
+          <span>•</span>
         </div>
       </div>
 

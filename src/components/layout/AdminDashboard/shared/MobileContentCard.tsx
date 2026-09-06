@@ -11,15 +11,17 @@ type Props =
   | {
       filteredContent: Blog[];
       setContent: Dispatch<SetStateAction<Blog[]>>;
+      refetch: () => void;
       type: "blog";
     }
   | {
       filteredContent: News[];
       setContent: Dispatch<SetStateAction<News[]>>;
+      refetch: () => void;
       type: "news";
     };
 
-const MobileContentCard = ({ filteredContent, setContent, type }: Props) => {
+const MobileContentCard = ({ filteredContent, refetch, setContent, type }: Props) => {
   return (
     <div className="divide-y divide-slate-100">
       {type === "blog"
@@ -34,7 +36,11 @@ const MobileContentCard = ({ filteredContent, setContent, type }: Props) => {
                 </div>
 
                 {/* Actions */}
-                <ActionButtonSet blog={content} setBlogs={setContent} />
+                <ActionButtonSet
+                  blog={content}
+                  setBlogs={setContent}
+                  refetch={refetch}
+                />
               </div>
             </div>
           ))
@@ -49,7 +55,11 @@ const MobileContentCard = ({ filteredContent, setContent, type }: Props) => {
                 </div>
 
                 {/* Actions */}
-                <NewsActionButtonSet news={content} setNews={setContent} />
+                <NewsActionButtonSet
+                  news={content}
+                  setNews={setContent}
+                  refetch={refetch}
+                />
               </div>
             </div>
           ))}

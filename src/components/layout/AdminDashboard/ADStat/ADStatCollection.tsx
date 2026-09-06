@@ -17,45 +17,6 @@ import Loading from '@/src/components/ui/Loading';
 
 type Props = {}
 
-const stats: Stat[] = [
-  {
-    title: "Total Blogs",
-    value: "128",
-    description: "12 added this month",
-    icon: FileText,
-  },
-  {
-    title: "Published Blogs",
-    value: "96",
-    description: "75% of total blogs",
-    icon: FileText,
-  },
-  {
-    title: "Draft Blogs",
-    value: "32",
-    description: "Waiting to be published",
-    icon: PenLine,
-  },
-  {
-    title: "Total News",
-    value: "84",
-    description: "8 added this month",
-    icon: Newspaper,
-  },
-  {
-    title: "Published News",
-    value: "71",
-    description: "84% of total news",
-    icon: Newspaper,
-  },
-  {
-    title: "Total Views",
-    value: "24.8K",
-    description: "18.4% this month",
-    icon: Eye,
-  },
-];
-
 export const getStats = (data: ContentStats): Stat[] => {
   const blogPublishedPercentage =
     data.blogs.total > 0
@@ -110,13 +71,18 @@ export const getStats = (data: ContentStats): Stat[] => {
       description: "Waiting to be published",
       icon: PenLine,
     },
+    {
+      title: "Total Views",
+      value: data.totalViews.toString(),
+      description: "People have viewed this",
+      icon: Eye,
+    },
   ];
 };
 
 const ADStatCollection = (props: Props) => {
   const { isLoading, stats: contentStats, error } = useContentStats()
   const stats = contentStats ? getStats(contentStats) : [];
-  console.log(stats);
   
   if (isLoading) return (<Loading />)
   

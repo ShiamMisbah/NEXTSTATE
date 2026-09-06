@@ -46,8 +46,9 @@ const Blog = (props: Props) => {
   const { blogs, pagination, loading, error, nextPage, previousPage } =
     useBlogs({
       limit: 10,
+      global: true
     });
-
+    
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [search, setSearch] = useState<string>("");
 
@@ -74,7 +75,7 @@ const Blog = (props: Props) => {
   const regularBlogs = useMemo(() => {
     return filteredBlogs.filter((blog) => blog._id !== featuredPost?._id);
   }, [filteredBlogs, featuredPost]);
-
+  
   const categoryRef = useRef<HTMLDivElement>(null);
 
   const scrollCategories = (direction: "left" | "right") => {
@@ -224,7 +225,13 @@ const Blog = (props: Props) => {
                   )}
 
                   {regularBlogs.length > 0 &&
-                    (activeCategory !== "All" || search) && (
+                    (activeCategory !== "All" || Boolean(search)) && (
+                      <BlogCard blog={regularBlogs[0]} index={0} />
+                    )}
+
+                  {regularBlogs.length > 0 &&
+                    !featuredPost &&
+                    activeCategory === "All" && (
                       <BlogCard blog={regularBlogs[0]} index={0} />
                     )}
 
@@ -246,16 +253,28 @@ const Blog = (props: Props) => {
 
                 {/* Blog Grid */}
                 <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
-                  {regularBlogs.slice(1).map((blog, index) => (
-                    <BlogCard blog={blog} index={index + 1} />
-                  ))}
+                  {!featuredPost &&
+                    regularBlogs
+                      .slice(1)
+                      .map((blog, index) => (
+                        <BlogCard blog={blog} index={index + 1} />
+                      ))}
+                  {featuredPost &&
+                    regularBlogs
+                      .map((blog, index) => (
+                        <BlogCard blog={blog} index={index + 1} />
+                      ))}
                 </div>
               </div>
             </section>
           </motion.div>
 
           {pagination && (
-            <Pagination nextPage={nextPage} pagination={pagination} previousPage={previousPage} />
+            <Pagination
+              nextPage={nextPage}
+              pagination={pagination}
+              previousPage={previousPage}
+            />
           )}
         </main>
       </div>

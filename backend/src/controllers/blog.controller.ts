@@ -4,6 +4,7 @@ import { clerkClient, getAuth } from "@clerk/express";
 
 // GET /api/blogs?page=1&limit=10
 export const getBlogs = async (req: Request, res: Response) => {
+  
   try {
     const page = Math.max(Number(req.query.page) || 1, 1);
     const limit = Math.max(Number(req.query.limit) || 10, 1);
@@ -43,6 +44,48 @@ export const getBlogs = async (req: Request, res: Response) => {
   }
 };
 
+// GET /api/blogs/published?page=1&limit=10
+export const getPublishedBlogs = async (req: Request, res: Response) => {  
+  try {
+    const page = Math.max(Number(req.query.page) || 1, 1);
+    const limit = Math.max(Number(req.query.limit) || 10, 1);
+
+    const skip = (page - 1) * limit;
+
+    const filter = {
+      published: true,
+    };
+
+    const [blogs, totalBlogs] = await Promise.all([
+      Blog.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+
+      Blog.countDocuments(filter),
+    ]);
+
+    const totalPages = Math.ceil(totalBlogs / limit);
+
+    return res.status(200).json({
+      success: true,
+      data: blogs,
+      pagination: {
+        currentPage: page,
+        limit,
+        totalBlogs,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
+    });
+  } catch (error) {
+    console.error("Get published blogs error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch published blogs",
+    });
+  }
+};
+
 // GET /api/blogs/:id
 export const getBlogById = async (req: Request, res: Response) => {
   try {
@@ -76,7 +119,11 @@ export const getBlogBySlug = async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
 
-    const blog = await Blog.findOne({ slug });
+    const blog = await Blog.findOneAndUpdate(
+      { slug },
+      { $inc: { views: 1 } },
+      { new: true },
+    );
 
     if (!blog) {
       return res.status(404).json({

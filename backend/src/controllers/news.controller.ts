@@ -40,6 +40,48 @@ export const getNews = async (req: Request, res: Response) => {
   }
 };
 
+// GET /api/news/published?page=1&limit=10
+export const getPublishedNews = async (req: Request, res: Response) => {
+  try {
+    const page = Math.max(Number(req.query.page) || 1, 1);
+    const limit = Math.max(Number(req.query.limit) || 10, 1);
+
+    const skip = (page - 1) * limit;
+
+    const filter = {
+      published: true,
+    };
+
+    const [news, totalNews] = await Promise.all([
+      News.find(filter).sort({ createdAt: -1 }).skip(skip).limit(limit),
+
+      News.countDocuments(filter),
+    ]);
+
+    const totalPages = Math.ceil(totalNews / limit);
+
+    return res.status(200).json({
+      success: true,
+      data: news,
+      pagination: {
+        currentPage: page,
+        limit,
+        totalNews,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPreviousPage: page > 1,
+      },
+    });
+  } catch (error) {
+    console.error("Get news error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch news",
+    });
+  }
+};
+
 // GET /api/news/:id
 export const getNewsById = async (req: Request, res: Response) => {
   try {
@@ -73,7 +115,11 @@ export const getNewsBySlug = async (req: Request, res: Response) => {
   try {
     const { slug } = req.params;
 
-    const news = await News.findOne({ slug });
+    const news = await News.findOneAndUpdate(
+      { slug },
+      { $inc: { views: 1 } },
+      { new: true },
+    );
 
     if (!news) {
       return res.status(404).json({

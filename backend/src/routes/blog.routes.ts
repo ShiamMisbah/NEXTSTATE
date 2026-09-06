@@ -7,6 +7,7 @@ import {
   createBlog,
   updateBlog,
   deleteBlog,
+  getPublishedBlogs,
 } from "../controllers/blog.controller";
 
 import { authMiddleware } from "../middleware/auth.middleware";
@@ -16,12 +17,13 @@ const router = Router();
 
 // Public
 router.get("/", getBlogs);
+router.get("/published", getPublishedBlogs);
 router.get("/slug/:slug", getBlogBySlug);
 router.get("/:id", getBlogById);
 
 // Protected
-router.post("/", requireAuth(), createBlog);
-router.put("/:id", requireAuth(), updateBlog);
-router.delete("/:id", requireAuth(), deleteBlog);
+router.post("/", authMiddleware, createBlog);
+router.put("/:id", authMiddleware, updateBlog);
+router.delete("/:id", authMiddleware, deleteBlog);
 
 export default router;

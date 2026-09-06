@@ -8,13 +8,17 @@ export interface ContentStats {
     published: number;
     drafts: number;
     featured: number;
+    views: number
   };
 
   news: {
     total: number;
     published: number;
     drafts: number;
+    views: number
   };
+
+  totalViews: number
 }
 
 export interface ContentStatsResponse {
@@ -55,7 +59,7 @@ export const useContentStats = () => {
         throw new Error("Failed to fetch content statistics");
       }
 
-      const result: ContentStatsResponse = await response.json();
+      const result: ContentStatsResponse = await response.json();      
 
       setStats(result.data);
     } catch (error) {

@@ -11,9 +11,10 @@ type Props = {
   loading: boolean;
   filteredNews: News[];
   setNews: Dispatch<SetStateAction<News[]>>;
+  refetch: () => void;
 };
 
-const DesktopNewsListTable = ({ loading, filteredNews, setNews }: Props) => {
+const DesktopNewsListTable = ({ loading, filteredNews, setNews, refetch }: Props) => {
   return (
     <table className="w-full">
       <thead>
@@ -90,7 +91,7 @@ const DesktopNewsListTable = ({ loading, filteredNews, setNews }: Props) => {
 
               {/* Actions */}
               <td className="px-5 py-4">
-                <NewsActionButtonSet news={news} setNews={setNews} />
+                <NewsActionButtonSet refetch={refetch} news={news} setNews={setNews} />
               </td>
             </tr>
           ))

@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useUser } from "@clerk/react";
+import { getToken, useUser } from "@clerk/react";
 import BlogHeader from "../../../components/layout/AdminDashboard/blog/BlogForm/BlogHeader";
 import BlogSidebar from "../../../components/layout/AdminDashboard/blog/BlogForm/BlogSidebar";
 import BlogMainForm from "../../../components/layout/AdminDashboard/blog/BlogForm/BlogMainForm";
@@ -48,10 +48,19 @@ const CreateBlog = () => {
         setLoading(true);
         setError("");
 
+        // ✅ use the getToken function obtained above
+        const token = await getToken();
+
+        if (!token) {
+          throw new Error("Authentication token not found");
+        }
+
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/blog/${blogId}`,
           {
-            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
         );
 
@@ -117,6 +126,13 @@ const CreateBlog = () => {
     try {
       setLoading(true);
 
+      // ✅ use the getToken function obtained above
+      const token = await getToken();
+
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
+
       const response = await fetch(
         isEditMode
           ? `${import.meta.env.VITE_API_URL}/api/blog/${blogId}`
@@ -125,6 +141,7 @@ const CreateBlog = () => {
           method: isEditMode ? "PUT" : "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
           body: JSON.stringify({
@@ -141,7 +158,7 @@ const CreateBlog = () => {
         },
       );
 
-      const data = await response.json();      
+      const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.message || "Failed to create blog");

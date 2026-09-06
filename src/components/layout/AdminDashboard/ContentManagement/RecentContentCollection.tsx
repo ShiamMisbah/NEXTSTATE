@@ -10,6 +10,7 @@ import { useRecentContent } from "@/src/hooks/useRecentContent";
 import { News } from "@/src/lib/NewsTypes";
 import Loading from "@/src/components/ui/Loading";
 import Empty from "@/src/components/ui/Empty";
+import { mapBlogToRecentContent, mapNewsToRecentContent } from "@/src/lib/ShapeContent";
 
 type Props = {
   cardTitle: string;
@@ -18,28 +19,6 @@ type Props = {
   contentType: "blog" | "news";
 };
 
-export const mapBlogToRecentContent = (blog: Blog): RecentContent => ({
-  title: blog.title,
-  category: blog.category,
-  date: new Date(blog.createdAt).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }),
-  status: blog.published ? "Published" : "Draft",
-  author: blog.author,
-});
-
-export const mapNewsToRecentContent = (news: News): RecentContent => ({
-  title: news.title,
-  date: new Date(news.createdAt).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }),
-  status: news.published ? "Published" : "Draft",
-  author: news.author,
-});
 
 const RecentBlogCollection = ({
   cardTitle,

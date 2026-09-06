@@ -1,14 +1,16 @@
 import { News } from "@/src/lib/NewsTypes";
+import { getToken } from "@clerk/react";
 import { BookCheck, BookDashed, Edit, Eye, EyeOff, Loader2, Star, Trash2 } from "lucide-react";
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 type Props = {
   news: News;
-  setNews: Dispatch<SetStateAction<News[]>>
+  setNews: Dispatch<SetStateAction<News[]>>;
+  refetch: () => void;
 };
 
-const NewsActionButtonSet = ({ news, setNews }: Props) => {
+const NewsActionButtonSet = ({ news, refetch, setNews }: Props) => {
   const navigate = useNavigate();
 
   const [actionLoading, setActionLoading] = useState<string | null>(null);
@@ -16,6 +18,12 @@ const NewsActionButtonSet = ({ news, setNews }: Props) => {
   const handlePublishToggle = async (news: News) => {
     try {
       setActionLoading(news._id);
+      // ✅ use the getToken function obtained above
+      const token = await getToken();
+
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/news/${news._id}`,
@@ -23,6 +31,7 @@ const NewsActionButtonSet = ({ news, setNews }: Props) => {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
           body: JSON.stringify({
@@ -47,6 +56,8 @@ const NewsActionButtonSet = ({ news, setNews }: Props) => {
             : item,
         ),
       );
+
+      refetch();
     } catch (error: any) {
       alert(error.message || "Failed to update news");
     } finally {
@@ -63,12 +74,21 @@ const NewsActionButtonSet = ({ news, setNews }: Props) => {
 
     try {
       setActionLoading(news._id);
+      // ✅ use the getToken function obtained above
+      const token = await getToken();
+
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
 
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/news/${news._id}`,
         {
           method: "DELETE",
           credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
       );
 
@@ -79,6 +99,8 @@ const NewsActionButtonSet = ({ news, setNews }: Props) => {
       }
 
       setNews((prev) => prev.filter((item) => item._id !== news._id));
+
+      refetch();
     } catch (error: any) {
       alert(error.message || "Failed to delete news");
     } finally {

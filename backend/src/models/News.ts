@@ -12,6 +12,7 @@ export interface INews extends Document {
   publishedAt: Date;
   createdAt: Date;
   updatedAt: Date;
+  views: number;
 }
 
 const newsSchema = new Schema<INews>(
@@ -32,6 +33,7 @@ const newsSchema = new Schema<INews>(
     authorId: { type: String, required: true, index: true }, // Clerk user id
     published: { type: Boolean, default: true },
     publishedAt: { type: Date, default: Date.now },
+    views: { type: Number, default: 0 },
   },
   { timestamps: true },
 );

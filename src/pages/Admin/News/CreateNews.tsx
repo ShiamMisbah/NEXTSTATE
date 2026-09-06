@@ -3,7 +3,7 @@ import NewsMainForm from '@/src/components/layout/AdminDashboard/news/BlogForm/N
 import NewsSidebar from '@/src/components/layout/AdminDashboard/news/BlogForm/NewsSidebar';
 import Loading from '@/src/components/ui/Loading';
 import { NewsForm } from '@/src/lib/NewsTypes';
-import { useUser } from '@clerk/react';
+import { getToken, useUser } from '@clerk/react';
 import React, { FormEvent, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -43,10 +43,19 @@ const CreateNews = (props: Props) => {
         setFetchingNews(true);
         setError(null);
 
+        // ✅ use the getToken function obtained above
+        const token = await getToken();
+
+        if (!token) {
+          throw new Error("Authentication token not found");
+        }
+
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/news/${newsId}`,
           {
-            credentials: "include",
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
         );
 
@@ -58,17 +67,17 @@ const CreateNews = (props: Props) => {
 
         const news = data.data;
 
-       setForm({
-         title: news.title || "",
-         slug: news.slug || "",
-         summary: news.summary || "",
-         content: news.content || "",
-         image: news.image || "",
-         published: news.published ?? true,
-         publishedAt: news.publishedAt
-           ? new Date(news.publishedAt).toISOString().slice(0, 16)
-           : "",
-       });
+        setForm({
+          title: news.title || "",
+          slug: news.slug || "",
+          summary: news.summary || "",
+          content: news.content || "",
+          image: news.image || "",
+          published: news.published ?? true,
+          publishedAt: news.publishedAt
+            ? new Date(news.publishedAt).toISOString().slice(0, 16)
+            : "",
+        });
       } catch (err: any) {
         setError(err.message || "Failed to load blog");
       } finally {
@@ -118,6 +127,13 @@ const CreateNews = (props: Props) => {
     try {
       setLoading(true);
 
+      // ✅ use the getToken function obtained above
+      const token = await getToken();
+
+      if (!token) {
+        throw new Error("Authentication token not found");
+      }
+
       const response = await fetch(
         isEditMode
           ? `${import.meta.env.VITE_API_URL}/api/news/${newsId}`
@@ -126,6 +142,7 @@ const CreateNews = (props: Props) => {
           method: isEditMode ? "PUT" : "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           credentials: "include",
           body: JSON.stringify({
@@ -139,7 +156,7 @@ const CreateNews = (props: Props) => {
         },
       );
 
-      const data = await response.json();      
+      const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.message || "Failed to create blog");

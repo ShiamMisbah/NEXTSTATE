@@ -12,9 +12,15 @@ type Props = {
   loading: boolean;
   filteredBlogs: Blog[];
   setBlogs: Dispatch<SetStateAction<Blog[]>>;
+  refetch: () => void;
 };
 
-const DesktopBlogListTable = ({ loading, filteredBlogs, setBlogs }: Props) => {
+const DesktopBlogListTable = ({
+  loading,
+  filteredBlogs,
+  setBlogs,
+  refetch,
+}: Props) => {
   return (
     <table className="w-full">
       <thead>
@@ -62,8 +68,8 @@ const DesktopBlogListTable = ({ loading, filteredBlogs, setBlogs }: Props) => {
           filteredBlogs.map((blog) => (
             <tr key={blog._id} className="transition hover:bg-slate-50">
               {/* Blog */}
-              <td className="max-w-md px-5 py-4">
-                <ContentThumbnail type='blog' content={blog} />
+              <td className="max-w-sm px-5 py-4">
+                <ContentThumbnail type="blog" content={blog} />
               </td>
 
               {/* Category */}
@@ -102,7 +108,11 @@ const DesktopBlogListTable = ({ loading, filteredBlogs, setBlogs }: Props) => {
 
               {/* Actions */}
               <td className="px-5 py-4">
-                <ActionButtonSet blog={blog} setBlogs={setBlogs} />
+                <ActionButtonSet
+                  refetch={refetch}
+                  blog={blog}
+                  setBlogs={setBlogs}
+                />
               </td>
             </tr>
           ))

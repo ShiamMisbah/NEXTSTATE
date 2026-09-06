@@ -24,14 +24,14 @@ const ADStatCard = ({ stat }: Props) => {
           <Icon className="h-4 w-4 text-emerald" />
         </div>
 
-        <div className="flex-2 min-w-0 flex flex-col justify-center gap-2">
+        <div className="flex-2 min-w-0 flex flex-col justify-center">
           <p className="text-xs md:text-md text-gray-500">{stat.title}</p>
 
           <p className=" truncate text-[11px] text-gray-400">
             {stat.description}
           </p>
         </div>
-        <div className="flex-1">
+        <div className="flex-1 text-center font-bold">
           <p className="text-3xl font-semibold leading-tight text-emerald">
             {stat.value}
           </p>

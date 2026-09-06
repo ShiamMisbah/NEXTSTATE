@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Blog, BlogStats } from "@/src/lib/BlogTypes";
 import { useBlogs } from "@/src/hooks/useBlogs";
 import Pagination from "@/src/components/ui/Pagination";
@@ -7,7 +7,7 @@ import DesktopBlogListTable from "@/src/components/layout/AdminDashboard/blog/Ad
 import MobileBlogCard from "@/src/components/layout/AdminDashboard/shared/MobileContentCard";
 import Loading from "@/src/components/ui/Loading";
 import Empty from "@/src/components/ui/Empty";
-import ContentListStat from "@/src/components/layout/AdminDashboard/shared/ContentListStat";
+import ContentListStat, { ContentListStatRef } from "@/src/components/layout/AdminDashboard/shared/ContentListStat";
 import ContentListHeader from "@/src/components/layout/AdminDashboard/shared/ContentListHeader";
 import MobileContentCard from "@/src/components/layout/AdminDashboard/shared/MobileContentCard";
 
@@ -19,15 +19,12 @@ export const formatDate = (date: string) => {
   });
 };
 
-const dummyContentStat : BlogStats = {
-  totalBlogs: 0,
-  totalPublished: 0,
-  totalDrafts: 0,
-  totalFeatured: 0,
-  totalViews: 0,
-};
-
 const AdminBlogs = () => {
+  const statsRef = useRef<ContentListStatRef>(null);
+
+  const handleRefetchStats = () => {
+    statsRef.current?.refetch();
+  };
 
   const { blogs, pagination, loading, error, nextPage, previousPage } =
     useBlogs({
@@ -75,7 +72,7 @@ const AdminBlogs = () => {
         />
 
         {/* Stats */}
-        <ContentListStat type="blog" />
+        <ContentListStat ref={statsRef} type="blog" />
 
         {/* Filters */}
         <BlogListFilter
@@ -94,6 +91,7 @@ const AdminBlogs = () => {
             <DesktopBlogListTable
               loading={loading}
               filteredBlogs={filteredBlogs}
+              refetch={handleRefetchStats}
               setBlogs={setReadableBlogs}
             />
 
@@ -114,9 +112,10 @@ const AdminBlogs = () => {
               <Empty content="No blogs found" />
             ) : (
               <MobileContentCard
-                  filteredContent={filteredBlogs}
-                  setContent={setReadableBlogs}
-                  type="blog"
+                filteredContent={filteredBlogs}
+                setContent={setReadableBlogs}
+                refetch={handleRefetchStats}
+                type="blog"
               />
             )}
           </div>
