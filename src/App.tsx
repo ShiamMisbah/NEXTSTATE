@@ -47,14 +47,13 @@ export default function App() {
         <main className="flex-grow">
           <Routes>
             {/* Public routes */}
-            {/* <Route path="/signup" element={<Signup />} /> */}
-
             <Route path="/" element={<Home />} />
             <Route path="/technology" element={<TechnologySolutions />} />
             <Route path="/advisory" element={<Advisory />} />
             <Route path="/about" element={<About />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPage />} />
             <Route path="/news" element={<News />} />

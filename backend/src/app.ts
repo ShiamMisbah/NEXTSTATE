@@ -20,6 +20,13 @@ app.use(express.json());
 
 app.use(clerkMiddleware());
 
+app.get("/api/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "API is running",
+  });
+});
+
 app.use("/api/blog", blogRoutes);
 app.use("/api/news", newsRoutes);
 app.use("/api/stats", statsRoutes);

@@ -50,7 +50,7 @@ const BlogSidebar = ({activeCategory, setActiveCategory}: Props) => {
         </div>
 
         {/* Newsletter */}
-        <div className="relative mt-6 overflow-hidden rounded-[1.5rem] bg-slate-950 p-5 text-white">
+        {/* <div className="relative mt-6 overflow-hidden rounded-[1.5rem] bg-slate-950 p-5 text-white">
           <Sparkles className="mb-4 text-cyan-300" size={20} />
 
           <h4 className="text-lg font-black">Stay ahead.</h4>
@@ -62,7 +62,7 @@ const BlogSidebar = ({activeCategory, setActiveCategory}: Props) => {
           <button className="mt-5 w-full rounded-xl bg-white py-2.5 text-xs font-bold text-slate-950 hover:bg-cyan-300">
             Subscribe
           </button>
-        </div>
+        </div> */}
       </div>
     </aside>
   );
