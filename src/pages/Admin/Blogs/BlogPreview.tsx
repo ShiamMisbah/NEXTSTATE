@@ -1,95 +1,42 @@
+import Loading from "@/src/components/ui/Loading";
+import { Blog } from "@/src/lib/BlogTypes";
+import { handleGetLocalStorage } from "@/src/lib/LocalStorageFunc";
 import { ArrowLeft, Calendar, Clock, Loader2, Tag, User } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { Blog } from "../lib/BlogTypes";
-import CustomCursor from "../components/layout/CustomCursor";
-import Loading from "../components/ui/Loading";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 
 type Props = {};
 
-const BlogPage = (props: Props) => {
-  const { slug } = useParams<{ slug: string }>();
 
-  const [blog, setBlog] = useState<Blog | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+const BlogPreview = (props: Props) => {
 
-  useEffect(() => {
-    const fetchBlog = async () => {
-      if (!slug) return;
-      try {
-        setLoading(true);
-        setError("");
+  const blog = handleGetLocalStorage("blogPreview")
 
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}/api/blog/slug/${slug}`,
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || "Failed to fetch blog");
-        }
-
-        setBlog(data.data);
-      } catch (error) {
-        console.error("Fetch blog error:", error);
-        setError(
-          error instanceof Error ? error.message : "Failed to load blog",
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBlog();
-  }, [slug]);
-
-  if (loading) {
+  if (!blog) {
     return (
-      <Loading />
-    );
-  }
-
-  if (error || !blog) {
-    return (
-      <main className="flex min-h-[70vh] flex-col items-center justify-center px-6 text-center">
-        <h1 className="text-2xl font-semibold text-gray-900">Blog not found</h1>
-
-        <p className="mt-2 text-gray-500">
-          {error || "The blog you're looking for doesn't exist."}
-        </p>
-
-        <Link
-          to="/blog"
-          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-black px-5 py-3 text-sm font-medium text-white transition hover:bg-gray-800"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Blog
-        </Link>
-      </main>
+      <div className="flex min-h-screen items-center justify-center">
+        <p className="text-slate-500">Preview Blog is unavailable.</p>
+      </div>
     );
   }
 
   return (
     <main className="bg-ivory text-charcoal min-h-screen pt-32 pb-24 overflow-hidden selection:bg-emerald/10 selection:text-emerald relative">
-      <CustomCursor theme="light" />
       <div className="container mx-auto px-6 md:px-12 max-w-7xl relative z-10">
         {/* Decorative Grid Accents */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#15241d08_1px,transparent_1px),linear-gradient(to_bottom,#15241d08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-10 pointer-events-none" />
 
+        {/* Page Heading */}
+        <div className="text-center  mb-6">
+          <h1 className="text-4xl font-bold leading-tight tracking-tight text-slate-600 mb-6">
+            Blog Preview
+          </h1>
+          <hr />
+        </div>
+
         {/* Hero */}
         <section className="border-b border-gray-100">
           <div className="mx-auto max-w-7xl">
-            {/* Back */}
-            <Link
-              to="/blog"
-              className="mb-10 inline-flex items-center gap-2 text-sm font-medium text-gray-500 transition hover:text-gray-900"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back to Blog
-            </Link>
-
             <div className="">
               {/* Category */}
               <div className="mb-5 flex items-center gap-2">
@@ -176,4 +123,4 @@ const BlogPage = (props: Props) => {
   );
 };
 
-export default BlogPage;
+export default BlogPreview;

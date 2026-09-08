@@ -26,6 +26,9 @@ import CreateBlog from "./pages/Admin/Blogs/CreateBlog";
 import AdminNews from "./pages/Admin/News/AdminNews";
 import CreateNews from "./pages/Admin/News/CreateNews";
 import Categories from "./pages/Admin/Categories";
+import ContentPreview from "./pages/Admin/ContentPreview";
+import BlogPreview from "./pages/Admin/Blogs/BlogPreview";
+import NewsPreview from "./pages/Admin/News/NewsPreview";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -66,10 +69,18 @@ export default function App() {
               <Route path="/admin/blog" element={<AdminBlogs />} />
               <Route path="/admin/blog/create" element={<CreateBlog />} />
               <Route path="/admin/blog/:blogId/edit" element={<CreateBlog />} />
+              <Route
+                path="/admin/blog/:slug/preview"
+                element={<BlogPreview />}
+              />
 
               <Route path="/admin/news" element={<AdminNews />} />
               <Route path="/admin/news/create" element={<CreateNews />} />
               <Route path="/admin/news/:newsId/edit" element={<CreateNews />} />
+              <Route
+                path="/admin/news/:slug/preview"
+                element={<NewsPreview />}
+              />
 
               <Route path="/admin/categories" element={<Categories />} />
             </Route>

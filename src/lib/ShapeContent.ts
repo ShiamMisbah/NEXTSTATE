@@ -26,3 +26,5 @@ export const mapNewsToRecentContent = (news: News): RecentContent => ({
   author: news.author,
   views: news.views,
 });
+
+

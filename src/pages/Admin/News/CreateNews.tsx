@@ -1,16 +1,17 @@
-import NewsHeader from '@/src/components/layout/AdminDashboard/news/NewsForm/NewsHeader';
-import NewsMainForm from '@/src/components/layout/AdminDashboard/news/NewsForm/NewsMainForm';
-import NewsSidebar from '@/src/components/layout/AdminDashboard/news/NewsForm/NewsSidebar';
-import Loading from '@/src/components/ui/Loading';
-import { NewsForm } from '@/src/lib/NewsTypes';
-import { getToken, useUser } from '@clerk/react';
-import React, { FormEvent, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
+import NewsHeader from "@/src/components/layout/AdminDashboard/news/NewsForm/NewsHeader";
+import NewsMainForm from "@/src/components/layout/AdminDashboard/news/NewsForm/NewsMainForm";
+import NewsSidebar from "@/src/components/layout/AdminDashboard/news/NewsForm/NewsSidebar";
+import Loading from "@/src/components/ui/Loading";
+import { handleSetLocalStorageWithExpiry } from "@/src/lib/LocalStorageFunc";
+import { NewsForm } from "@/src/lib/NewsTypes";
+import { getToken, useUser } from "@clerk/react";
+import React, { FormEvent, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-type Props = {}
+type Props = {};
 
 const CreateNews = (props: Props) => {
-    const { newsId } = useParams<{ newsId: string }>();
+  const { newsId } = useParams<{ newsId: string }>();
 
   const isEditMode = Boolean(newsId);
 
@@ -18,14 +19,13 @@ const CreateNews = (props: Props) => {
   const { user } = useUser();
 
   const [form, setForm] = useState<NewsForm>({
-
     title: "",
     slug: "",
     summary: "",
     content: "",
     image: "",
     published: true,
-    publishedAt: ""
+    publishedAt: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -62,7 +62,7 @@ const CreateNews = (props: Props) => {
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(data.message || "Failed to fetch blog");
+          throw new Error(data.message || "Failed to fetch news");
         }
 
         const news = data.data;
@@ -79,15 +79,19 @@ const CreateNews = (props: Props) => {
             : "",
         });
       } catch (err: any) {
-        setError(err.message || "Failed to load blog");
+        setError(err.message || "Failed to load news");
       } finally {
-        setFetchingNews(false)
+        setFetchingNews(false);
         setLoading(false);
       }
     };
 
     fetchNews();
   }, [newsId]);
+
+  useEffect(() => {
+    handleSetNewsLocally();
+  }, [form]);
 
   const updateField = <K extends keyof NewsForm>(
     field: K,
@@ -105,12 +109,12 @@ const CreateNews = (props: Props) => {
     setError("");
 
     if (!user) {
-      setError("You must be logged in to create a blog.");
+      setError("You must be logged in to create a news.");
       return;
     }
 
     if (!form.title.trim()) {
-      setError("Please enter a blog title.");
+      setError("Please enter a news title.");
       return;
     }
 
@@ -120,7 +124,7 @@ const CreateNews = (props: Props) => {
     }
 
     if (!form.content.trim()) {
-      setError("Please enter blog content.");
+      setError("Please enter news content.");
       return;
     }
 
@@ -159,7 +163,7 @@ const CreateNews = (props: Props) => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Failed to create blog");
+        throw new Error(data.message || "Failed to create news");
       }
 
       navigate("/admin/news");
@@ -170,10 +174,21 @@ const CreateNews = (props: Props) => {
     }
   };
 
-  if (fetchingNews) {
-    return (
-      <Loading content='Loading Editable Document.' />
+  const handleSetNewsLocally = () =>
+    handleSetLocalStorageWithExpiry("NewsPreview", form, 10 * 60 * 1000);
+
+  const handlePreview = () => {
+    handleSetNewsLocally();
+
+    window.open(
+      `/admin/news/${form.slug}/preview`,
+      "_blank",
+      "noopener,noreferrer",
     );
+  };
+
+  if (fetchingNews) {
+    return <Loading content="Loading Editable Document." />;
   }
 
   return (
@@ -183,7 +198,11 @@ const CreateNews = (props: Props) => {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#15241d08_1px,transparent_1px),linear-gradient(to_bottom,#15241d08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-10 pointer-events-none" />
 
         {/* Header */}
-        <NewsHeader isEditMode={isEditMode} slug={form.slug} />
+        <NewsHeader
+          handlePreview={handlePreview}
+          isEditMode={isEditMode}
+          slug={form.slug}
+        />
 
         {/* Error */}
         {error && (
@@ -193,7 +212,7 @@ const CreateNews = (props: Props) => {
         )}
 
         <form
-          id="create-blog-form"
+          id="create-news-form"
           onSubmit={handleSubmit}
           className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_340px]"
         >
@@ -222,4 +241,4 @@ const CreateNews = (props: Props) => {
   );
 };
 
-export default CreateNews
+export default CreateNews;

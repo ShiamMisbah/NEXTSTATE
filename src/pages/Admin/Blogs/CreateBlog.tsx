@@ -5,6 +5,7 @@ import BlogHeader from "../../../components/layout/AdminDashboard/blog/BlogForm/
 import BlogSidebar from "../../../components/layout/AdminDashboard/blog/BlogForm/BlogSidebar";
 import BlogMainForm from "../../../components/layout/AdminDashboard/blog/BlogForm/BlogMainForm";
 import { BlogForm } from "@/src/lib/BlogTypes";
+import { handleSetLocalStorageWithExpiry } from "@/src/lib/LocalStorageFunc";
 
 const CreateBlog = () => {
   const { blogId } = useParams<{ blogId: string }>();
@@ -70,7 +71,7 @@ const CreateBlog = () => {
           throw new Error(data.message || "Failed to fetch blog");
         }
 
-        const blog = data.data;
+        const blog = data.data;        
 
         setForm({
           title: blog.title || "",
@@ -92,6 +93,10 @@ const CreateBlog = () => {
 
     fetchBlog();
   }, [blogId]);
+
+  useEffect(() => {
+    handleSetBlogLocally();
+  }, [form]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -172,6 +177,19 @@ const CreateBlog = () => {
     }
   };
 
+  const handleSetBlogLocally = () =>
+    handleSetLocalStorageWithExpiry("blogPreview", form, 10 * 60 * 1000);
+
+  const handlePreview = () => {
+    handleSetBlogLocally();
+
+    window.open(
+      `/admin/blog/${form.slug}/preview`,
+      "_blank",
+      "noopener,noreferrer",
+    );
+  };
+
   return (
     <div className="bg-ivory text-charcoal min-h-screen pt-32 pb-24 overflow-hidden selection:bg-emerald/10 selection:text-emerald relative">
       <div className="container mx-auto px-6 md:px-12 max-w-6xl relative z-10">
@@ -179,7 +197,7 @@ const CreateBlog = () => {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#15241d08_1px,transparent_1px),linear-gradient(to_bottom,#15241d08_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] -z-10 pointer-events-none" />
 
         {/* Header */}
-        <BlogHeader isEditMode={isEditMode} slug={form.slug} />
+        <BlogHeader handlePreview={handlePreview} isEditMode={isEditMode} slug={form.slug} />
 
         {/* Error */}
         {error && (

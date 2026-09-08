@@ -3,6 +3,7 @@ import StarterKit from "@tiptap/starter-kit";
 import Color from "@tiptap/extension-color";
 import { TextStyle } from "@tiptap/extension-text-style";
 import MenuBar from "./MenuBar";
+import { useEffect } from "react";
 
 interface RichTextEditorProps {
   value: string;
@@ -13,7 +14,7 @@ const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
   const editor = useEditor({
     extensions: [StarterKit, TextStyle, Color],
 
-    content: value,
+    content: value || "",
 
     onUpdate: ({ editor }) => {
       onChange(editor.getHTML());
@@ -27,7 +28,19 @@ const RichTextEditor = ({ value, onChange }: RichTextEditorProps) => {
     },
   });
 
-  if (!editor) return null;
+   useEffect(() => {
+     if (!editor) return;
+
+     const currentContent = editor.getHTML();
+
+     if (value !== currentContent) {
+       editor.commands.setContent(value || "", {
+         emitUpdate: false,
+       });
+     }
+   }, [editor, value]);
+
+   if (!editor) return null;
 
   return (
     <div
