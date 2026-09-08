@@ -144,75 +144,12 @@ const NewsPage = (props: Props) => {
           )}
 
           {/* Article Content */}
-          <article className="py-12 ">
-            <div
-              className="
-            text-[17px] leading-8 text-slate-700
-
-            [&_h1]:mb-6
-            [&_h1]:mt-10
-            [&_h1]:text-3xl
-            [&_h1]:font-bold
-            [&_h1]:leading-tight
-            [&_h1]:text-slate-900
-
-            [&_h2]:mb-5
-            [&_h2]:mt-10
-            [&_h2]:text-2xl
-            [&_h2]:font-bold
-            [&_h2]:leading-tight
-            [&_h2]:text-slate-900
-
-            [&_h3]:mb-4
-            [&_h3]:mt-8
-            [&_h3]:text-xl
-            [&_h3]:font-semibold
-            [&_h3]:text-slate-900
-
-            [&_p]:mb-6
-
-            [&_a]:font-medium
-            [&_a]:text-blue-600
-            [&_a]:underline
-            [&_a]:underline-offset-4
-
-            [&_ul]:mb-6
-            [&_ul]:list-disc
-            [&_ul]:space-y-2
-            [&_ul]:pl-6
-
-            [&_ol]:mb-6
-            [&_ol]:list-decimal
-            [&_ol]:space-y-2
-            [&_ol]:pl-6
-
-            [&_li]:pl-1
-
-            [&_blockquote]:my-8
-            [&_blockquote]:border-l-4
-            [&_blockquote]:border-blue-600
-            [&_blockquote]:bg-slate-50
-            [&_blockquote]:px-6
-            [&_blockquote]:py-4
-            [&_blockquote]:italic
-            [&_blockquote]:text-slate-600
-
-            [&_img]:my-8
-            [&_img]:w-full
-            [&_img]:rounded-xl
-
-            [&_strong]:font-semibold
-            [&_strong]:text-slate-900
-
-            [&_code]:rounded
-            [&_code]:bg-slate-100
-            [&_code]:px-1.5
-            [&_code]:py-0.5
-            [&_code]:text-sm
-          "
-              dangerouslySetInnerHTML={{ __html: news.content }}
+          <section className="py-12 ">
+            <article
+              className="view-content"
+              dangerouslySetInnerHTML={{ __html: news.content || "" }}
             />
-          </article>
+          </section>
         </main>
       </div>
     </div>

@@ -171,22 +171,7 @@ const BlogPage = (props: Props) => {
         {/* Content */}
         <section className="py-12 ">
           <article
-            className="
-            prose
-            prose-lg
-            max-w-none
-            prose-headings:font-semibold
-            prose-headings:tracking-tight
-            prose-p:text-gray-700
-            prose-p:leading-8
-            prose-a:text-blue-600
-            prose-a:no-underline
-            hover:prose-a:underline
-            prose-img:rounded-xl
-            prose-strong:text-gray-900
-            prose-blockquote:border-l-gray-300
-            prose-blockquote:text-gray-600
-          "
+            className="view-content"
             dangerouslySetInnerHTML={{ __html: blog.content || "" }}
           />
         </section>
