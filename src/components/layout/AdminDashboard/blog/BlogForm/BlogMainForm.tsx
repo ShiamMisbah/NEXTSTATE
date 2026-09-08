@@ -1,6 +1,7 @@
 import React, { SetStateAction } from "react";
 import { ImageIcon } from "lucide-react";
 import { BlogForm } from "@/src/lib/BlogTypes";
+import RichTextEditor from "../../shared/TextEditor/RichTextEditor";
 
 type Props = {
   form: BlogForm;
@@ -119,14 +120,9 @@ const BlogMainForm = ({ form, loading, updateField, setForm }: Props) => {
             >
               Content
             </label>
-
-            <textarea
-              id="content"
-              rows={8}
-              placeholder="Write your blog content here..."
+            <RichTextEditor
               value={form.content}
-              onChange={(e) => updateField("content", e.target.value)}
-              className="w-full resize-y rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm leading-7 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-slate-900 focus:ring-1 focus:ring-slate-900"
+              onChange={(content) => updateField("content", content)}
             />
 
             <p className="mt-2 text-xs text-slate-400">

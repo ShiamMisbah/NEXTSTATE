@@ -1,6 +1,6 @@
-import NewsHeader from '@/src/components/layout/AdminDashboard/news/BlogForm/NewsHeader';
-import NewsMainForm from '@/src/components/layout/AdminDashboard/news/BlogForm/NewsMainForm';
-import NewsSidebar from '@/src/components/layout/AdminDashboard/news/BlogForm/NewsSidebar';
+import NewsHeader from '@/src/components/layout/AdminDashboard/news/NewsForm/NewsHeader';
+import NewsMainForm from '@/src/components/layout/AdminDashboard/news/NewsForm/NewsMainForm';
+import NewsSidebar from '@/src/components/layout/AdminDashboard/news/NewsForm/NewsSidebar';
 import Loading from '@/src/components/ui/Loading';
 import { NewsForm } from '@/src/lib/NewsTypes';
 import { getToken, useUser } from '@clerk/react';

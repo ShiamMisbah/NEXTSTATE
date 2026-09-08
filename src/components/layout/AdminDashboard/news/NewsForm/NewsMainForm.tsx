@@ -2,6 +2,7 @@ import React, { SetStateAction } from "react";
 import { ImageIcon } from "lucide-react";
 import { BlogForm } from "@/src/lib/BlogTypes";
 import { NewsForm } from "@/src/lib/NewsTypes";
+import RichTextEditor from "../../shared/TextEditor/RichTextEditor";
 
 type Props = {
   form: NewsForm;
@@ -96,15 +97,14 @@ const NewsMainForm = ({ form, loading, updateField, setForm }: Props) => {
               Content
             </label>
 
-            <textarea
-              name="content"
+            <RichTextEditor
               value={form.content}
-              onChange={(e) => updateField("content", e.target.value)}
-              placeholder="Write your news content..."
-              rows={8}
-              required
-              className="w-full resize-y rounded-lg border border-slate-200 px-4 py-2.5 text-sm leading-6 outline-none transition focus:border-slate-400 focus:ring-2 focus:ring-slate-100"
+              onChange={(content) => updateField("content", content)}
             />
+
+            <p className="mt-2 text-xs text-slate-400">
+              Rich text editor can be added here later.
+            </p>
           </div>
         </div>
       </div>
