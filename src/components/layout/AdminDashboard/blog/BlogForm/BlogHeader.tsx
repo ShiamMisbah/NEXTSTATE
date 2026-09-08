@@ -13,7 +13,7 @@ type Props = {
 const BlogHeader = ({ isEditMode = false, slug, handlePreview }: Props) => {
   const navigate = useNavigate();
   return (
-    <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="mb-8 flex gap-4 flex-row items-center justify-between">
       <div>
         <button
           type="button"
@@ -39,7 +39,7 @@ const BlogHeader = ({ isEditMode = false, slug, handlePreview }: Props) => {
         <button
           type="button"
           onClick={() => handlePreview()}
-          className="hidden items-center gap-2 rounded-lg border bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 sm:flex"
+          className="items-center gap-2 rounded-lg border bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 flex"
         >
           <Eye size={16} />
           Preview

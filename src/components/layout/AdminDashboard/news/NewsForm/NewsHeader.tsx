@@ -40,7 +40,7 @@ const NewsHeader = ({ isEditMode = false, slug, handlePreview }: Props) => {
         <button
           type="button"
           onClick={() => handlePreview()}
-          className="hidden items-center gap-2 rounded-lg border bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 sm:flex"
+          className="items-center gap-2 rounded-lg border bg-white px-4 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 flex"
         >
           <Eye size={16} />
           Preview

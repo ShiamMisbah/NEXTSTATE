@@ -91,7 +91,7 @@ function Hero() {
           playsInline 
           className="absolute inset-0 w-full h-full object-cover scale-[1.5] md:scale-[2.5] lg:scale-[3] transform-gpu origin-center opacity-60"
         >
-          <source src="/hero_video.mp4?v=final" type="video/mp4" />
+          <source src="/hero_video_v2.mp4?v=final" type="video/mp4" />
           <source src="https://upload.wikimedia.org/wikipedia/commons/8/87/Cinematic_BANGLADESH_in_4K_-_DJI_Mini_2_-_Part_1.webm" type="video/webm" />
           <source src="https://upload.wikimedia.org/wikipedia/commons/4/42/Metro_train_arriving_in_agargaon_station.webm" type="video/webm" />
         </video>
